@@ -1,5 +1,7 @@
 package diary.service;
 
+import diary.dao.UserDao;
+import diary.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class SecurityServiceImpl implements SecurityService {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private UserDao userDao;
+
     @Override
     public UserDetails findLoggedInUsername() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -29,6 +34,17 @@ public class SecurityServiceImpl implements SecurityService {
         }
 
         return null;
+    }
+
+    @Override
+    public User findLoggedInUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = null;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        }
+
+        return userDao.getByUsername(username);
     }
 
     @Override

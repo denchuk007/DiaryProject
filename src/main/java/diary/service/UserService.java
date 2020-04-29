@@ -1,5 +1,6 @@
 package diary.service;
 
+import diary.model.Mark;
 import diary.model.Role;
 import diary.model.User;
 
@@ -16,4 +17,5 @@ public interface UserService {
     void setPupilToTheClassroom(Long classroomId, Long pupilId);
     void setPupilToTheParent(Long parentId, Long pupilId);
     List<User> findAllPupils();
+    List<Mark> findAllCurrentPupilMarks();
 }

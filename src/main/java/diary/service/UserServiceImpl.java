@@ -1,7 +1,9 @@
 package diary.service;
 
+import diary.dao.MarkDao;
 import diary.dao.RoleDao;
 import diary.dao.UserDao;
+import diary.model.Mark;
 import diary.model.Role;
 import diary.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleDao roleDao;
+
+    @Autowired
+    private MarkDao markDao;
+
+    @Autowired
+    private SecurityService securityService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -92,5 +100,11 @@ public class UserServiceImpl implements UserService {
 //        List<Object> results = entityManager.createNativeQuery("SELECT username FROM users, user_roles WHERE users.id == user_roles.id").getResultList();
         Role pupilRole = roleDao.findOne(1L);
         return userDao.findAllByRoles(pupilRole);
+    }
+
+    @Override
+    public List<Mark> findAllCurrentPupilMarks() {
+        User user = securityService.findLoggedInUser();
+        return markDao.findAllByPupilId(user.getId().toString());
     }
 }

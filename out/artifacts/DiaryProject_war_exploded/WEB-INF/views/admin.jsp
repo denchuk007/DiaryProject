@@ -44,7 +44,13 @@
                 <th>${user.id}</th>
                 <td>${user.username}</td>
                 <td>${user.password}</td>
-                <td></td>
+                <td>
+                    <c:if test="${!empty user.roles}">
+                        <c:forEach items="${user.roles}" var="role">
+                            ${role.name}
+                        </c:forEach>
+                    </c:if>
+                </td>
                 <td>
                     <form action="${pageContext.request.contextPath}/admin" method="post">
                         <input type="hidden" name="userId" value="${user.id}"/>

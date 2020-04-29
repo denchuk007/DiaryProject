@@ -29,6 +29,16 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
+    @RequestMapping(value = "/pupil", method = RequestMethod.GET)
+    public String pupil(Model model) {
+        model.addAttribute("currentUser", securityService.findLoggedInUsername());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("userForm", new User());
+        model.addAttribute("marks", userService.findAllCurrentPupilMarks());
+
+        return "pupil";
+    }
+
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
@@ -93,7 +103,7 @@ public class UserController {
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String admin(Model model) {
-        model.addAttribute("user", User.class);
+        model.addAttribute("user", new User());
         model.addAttribute("listUsers", userService.findAllUsers());
         model.addAttribute("loggedUser", securityService.findLoggedInUsername());
 

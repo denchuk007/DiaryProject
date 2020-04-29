@@ -6,6 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 public interface SecurityService {
 
     UserDetails findLoggedInUsername();
-
+    User findLoggedInUser();
     void autoLogin(String username, String password);
 }
