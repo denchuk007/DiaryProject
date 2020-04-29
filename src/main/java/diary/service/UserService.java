@@ -18,4 +18,5 @@ public interface UserService {
     void setPupilToTheParent(Long parentId, Long pupilId);
     List<User> findAllPupils();
     List<Mark> findAllCurrentPupilMarks();
+    boolean deleteUser(String userId);
 }

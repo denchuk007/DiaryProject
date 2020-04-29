@@ -107,4 +107,13 @@ public class UserServiceImpl implements UserService {
         User user = securityService.findLoggedInUser();
         return markDao.findAllByPupilId(user.getId().toString());
     }
+
+    @Override
+    public boolean deleteUser(String userId) {
+        if (userDao.findById(userId) != null) {
+            userDao.deleteById(userId);
+            return true;
+        }
+        return false;
+    }
 }

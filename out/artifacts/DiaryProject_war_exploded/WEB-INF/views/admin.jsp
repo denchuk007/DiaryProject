@@ -54,14 +54,13 @@
                 <td>
                     <form action="${pageContext.request.contextPath}/admin" method="post">
                         <input type="hidden" name="userId" value="${user.id}"/>
-                        <input type="hidden" name="action" value="edit"/>
                         <button type="submit">Edit</button>
                     </form>
                 </td>
                 <td>
-                    <form action="${pageContext.request.contextPath}/admin" method="post">
-                        <input type="hidden" name="userId" value="${user.id}"/>
-                        <input type="hidden" name="action" value="delete"/>
+                    <form action="${contextPath}/admin" method="post">
+                        <input id="userId" type="hidden" name="userId" value="${user.id}"/>
+                        <input id="action" type="hidden" name="action" value="delete"/>
                         <button type="submit">Delete</button>
                     </form>
                 </td>

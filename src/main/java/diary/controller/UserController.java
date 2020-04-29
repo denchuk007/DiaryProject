@@ -109,4 +109,18 @@ public class UserController {
 
         return "admin";
     }
+
+    @RequestMapping(value = "/admin", method = RequestMethod.POST)
+    public String deleteUser(@RequestParam(required = true, defaultValue = "" ) Long userId,
+                             @RequestParam(required = true, defaultValue = "" ) String action, Model model) {
+        model.addAttribute("user", new User());
+        model.addAttribute("listUsers", userService.findAllUsers());
+        model.addAttribute("loggedUser", securityService.findLoggedInUsername());
+
+        if (action.equals("delete")) {
+            userService.deleteUser(userId.toString());
+        }
+
+        return "redirect:/admin";
+    }
 }
