@@ -7,50 +7,69 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
     <title>Admin</title>
-
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-<div class="container">
+
+<a href="${contextPath}/registration"><button class="btn btn-primary pull-right">Создать аккаунт</button></a>
+<br>
+
     <c:if test="${pageContext.request.userPrincipal.name != null}">
         <form id="logoutForm" method="post" action="${contextPath}/logout">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
-        <h2>Admin Page ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a>
-        </h2>
-        <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
+        <h3 class="text-right">Админ панель ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Выйти</a>
+        </h3>
     </c:if>
-</div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+<span><c:forEach items="${loggedUser.authorities}" var="authorities"> ${authorities.authority} </c:forEach></span>
 
 <c:if test="${!empty listUsers}">
-    <table class="tg">
+    <table class="table table-bordered">
+        <thead>
         <tr>
-            <th width="80">ID</th>
-            <th width="120">Name</th>
-            <th width="120">Birthday</th>
-            <th width="120">Role</th>
-            <th width="60">Edit</th>
-            <th width="60">Delete</th>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Roles</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
+        </thead>
         <c:forEach items="${listUsers}" var="user">
+        <tbody>
             <tr>
-                <td>${user.id}</td>
+                <th>${user.id}</th>
                 <td>${user.username}</td>
                 <td>${user.password}</td>
+                <td></td>
+                <td>
+                    <form action="${pageContext.request.contextPath}/admin" method="post">
+                        <input type="hidden" name="userId" value="${user.id}"/>
+                        <input type="hidden" name="action" value="edit"/>
+                        <button type="submit">Edit</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="${pageContext.request.contextPath}/admin" method="post">
+                        <input type="hidden" name="userId" value="${user.id}"/>
+                        <input type="hidden" name="action" value="delete"/>
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
+        </tbody>
         </c:forEach>
     </table>
 </c:if>
-
+<script>
+    $(document).ready(function(){
+        $(".table").css("display", "block !important");
+    });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 </body>
 </html>

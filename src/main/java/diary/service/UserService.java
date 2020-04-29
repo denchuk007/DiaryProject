@@ -1,23 +1,19 @@
 package diary.service;
 
+import diary.model.Role;
 import diary.model.User;
 
 import java.util.List;
 
-/**
- * Service class for {@link User}
- *
- * @author Eugene Suleimanov
- * @version 1.0
- */
-
 public interface UserService {
 
-    void save(User user);
-
+    void save(User user, Long roleId);
     User findByUsername(String username);
-
     User getByUserName(String username);
-
-    List<User> findAll();
+    List<User> findAllUsers();
+    List<Role> findAllRoles();
+    void setTeacherToTheClassroom(Long classroomId, Long teacherId);
+    void setPupilToTheClassroom(Long classroomId, Long pupilId);
+    void setPupilToTheParent(Long parentId, Long pupilId);
+    List<User> findAllPupils();
 }

@@ -1,15 +1,11 @@
 package diary.service;
 
-/**
- * Service for Security.
- *
- * @author Eugene Suleimanov
- * @version 1.0
- */
+import diary.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface SecurityService {
 
-    String findLoggedInUsername();
+    UserDetails findLoggedInUsername();
 
     void autoLogin(String username, String password);
 }

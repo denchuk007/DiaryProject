@@ -4,13 +4,6 @@ package diary.model;
 import javax.persistence.*;
 import java.util.Set;
 
-/**
- * Simple JavaBean object that represents role of {@link User}.
- *
- * @author Eugene Suleimanov
- * @version 1.0
- */
-
 @Entity
 @Table(name = "roles")
 public class Role {

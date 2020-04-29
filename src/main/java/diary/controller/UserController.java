@@ -1,5 +1,6 @@
 package diary.controller;
 
+import diary.service.ClassroomService;
 import diary.service.SecurityService;
 import diary.service.UserService;
 import diary.validator.UserValidator;
@@ -11,13 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-/**
- * Controller for {@link User}'s pages.
- *
- * @author Eugene Suleimanov
- * @version 1.0
- */
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
@@ -29,26 +24,49 @@ public class UserController {
     private SecurityService securityService;
 
     @Autowired
+    private ClassroomService classroomService;
+
+    @Autowired
     private UserValidator userValidator;
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
+        model.addAttribute("roles", userService.findAllRoles());
+        model.addAttribute("classrooms", classroomService.findAll());
+        model.addAttribute("pupils", userService.findAllPupils());
 
         return "registration";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
+    public String registration(@ModelAttribute("userForm") User userForm,
+                               @RequestParam(required = true, defaultValue = "" ) Long roleId,
+                               @RequestParam(required = true, defaultValue = "" ) Long classroomId,
+                               @RequestParam(required = true, defaultValue = "" ) Long pupilId,
+                               BindingResult bindingResult, Model model) {
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "registration";
         }
 
-        userService.save(userForm);
+        userService.save(userForm, roleId);
 
-        securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
+        if (classroomId != 0) {
+            if (roleId == 1) {
+                userService.setPupilToTheClassroom(classroomId, userForm.getId());
+            }
+            if (roleId == 3) {
+                userService.setTeacherToTheClassroom(classroomId, userForm.getId());
+            }
+        }
+
+        if (roleId == 2) {
+            userService.setPupilToTheParent(userForm.getId(), pupilId);
+        }
+
+        //securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
 
         return "redirect:/welcome";
     }
@@ -56,11 +74,11 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
         if (error != null) {
-            model.addAttribute("error", "Username or password is incorrect.");
+            model.addAttribute("error", "Логин или пароль некоррекнты.");
         }
 
         if (logout != null) {
-            model.addAttribute("message", "Logged out successfully.");
+            model.addAttribute("message", "Успешный выход из аккаунта.");
         }
 
         return "login";
@@ -68,13 +86,17 @@ public class UserController {
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model) {
+        model.addAttribute("currentUser", securityService.findLoggedInUsername());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
         return "welcome";
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String admin(Model model) {
         model.addAttribute("user", User.class);
-        model.addAttribute("listUsers", userService.findAll());
+        model.addAttribute("listUsers", userService.findAllUsers());
+        model.addAttribute("loggedUser", securityService.findLoggedInUsername());
+
         return "admin";
     }
 }
