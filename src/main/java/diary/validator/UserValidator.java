@@ -8,13 +8,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-/**
- * Validator for {@link User} class,
- * implements {@link Validator} interface.
- *
- * @author Eugene Suleimanov
- * @version 1.0
- */
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class UserValidator implements Validator {
@@ -34,6 +29,19 @@ public class UserValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "Required");
         if (user.getUsername().length() < 1 || user.getUsername().length() > 32) {
             errors.rejectValue("username", "Size.userForm.username");
+        }
+
+        if (user.getName().length() < 1 || user.getName().length() > 32) {
+            errors.rejectValue("name", "Некорректный ввод имени");
+        }
+
+        if (user.getSurname().length() < 1 || user.getSurname().length() > 32) {
+            errors.rejectValue("surname", "Некорректный ввод фамилии");
+        }
+
+        Matcher matcher = Pattern.compile("^\\d{4}\\-\\d{2}\\-\\d{2}$").matcher(user.getBirthday());
+        if (!matcher.find()) {
+            errors.rejectValue("birthday", "Некорректный ввод дня рождения");
         }
 
         if (userService.findByUsername(user.getUsername()) != null) {

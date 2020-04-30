@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -94,12 +95,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllPupils() {
-//        entityManager.createNativeQuery("SELECT username FROM users, user_roles WHERE users.id == user_roles.id")
-//                .executeUpdate();
-//        List<Object> results = entityManager.createNativeQuery("SELECT username FROM users, user_roles WHERE users.id == user_roles.id").getResultList();
-        Role pupilRole = roleDao.findOne(1L);
-        return userDao.findAllByRoles(pupilRole);
+    public List<User> findAllByRole(Long roleId) {
+        Role role = roleDao.findOne(roleId);
+        return userDao.findAllByRoles(role);
     }
 
     @Override
@@ -109,11 +107,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUser(String userId) {
+    @Transactional
+    public boolean deleteUser(Long userId) {
         if (userDao.findById(userId) != null) {
             userDao.deleteById(userId);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<User> findAllCurrentTeacherPupils() {
+        User user = securityService.findLoggedInUser();
+        List<Object> results = entityManager.createNativeQuery(
+                "SELECT classroom_id FROM classroom_teacher WHERE classroom_teacher.teacher_id = " + user.getId().toString()).getResultList();
+        Long classroomId = Long.valueOf(results.get(0).toString());
+
+        List<Object> results2 = entityManager.createNativeQuery(
+                "SELECT pupil_id FROM classroom_pupil WHERE classroom_pupil.classroom_id = " + classroomId.toString()).getResultList();
+
+        List<User> pupils = new ArrayList<>();
+        for (Object pupilId : results2) {
+            pupils.add(userDao.findById(Long.valueOf(pupilId.toString())));
+        }
+
+        return pupils;
     }
 }

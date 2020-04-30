@@ -16,7 +16,8 @@ public interface UserService {
     void setTeacherToTheClassroom(Long classroomId, Long teacherId);
     void setPupilToTheClassroom(Long classroomId, Long pupilId);
     void setPupilToTheParent(Long parentId, Long pupilId);
-    List<User> findAllPupils();
+    List<User> findAllByRole(Long roleId);
     List<Mark> findAllCurrentPupilMarks();
-    boolean deleteUser(String userId);
+    boolean deleteUser(Long userId);
+    List<User> findAllCurrentTeacherPupils();
 }

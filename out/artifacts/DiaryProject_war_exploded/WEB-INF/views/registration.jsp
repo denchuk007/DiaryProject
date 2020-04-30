@@ -49,6 +49,30 @@
             </div>
         </spring:bind>
 
+        <spring:bind path="name">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="name" class="form-control"
+                            placeholder="Имя"></form:input>
+                <form:errors path="name"></form:errors>
+            </div>
+        </spring:bind>
+
+        <spring:bind path="surname">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="surname" class="form-control"
+                            placeholder="Фамлиия"></form:input>
+                <form:errors path="surname"></form:errors>
+            </div>
+        </spring:bind>
+
+        <spring:bind path="birthday">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="birthday" class="form-control"
+                            placeholder="Дата рождения"></form:input>
+                <form:errors path="birthday"></form:errors>
+            </div>
+        </spring:bind>
+
         <select id="roles"  onchange="document.getElementById('roleId').value= this.value; ">
             <c:if test="${roles != null}">
                 <option selected>Выберите роль</option>

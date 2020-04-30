@@ -26,9 +26,9 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>Value</th>
-                    <th>Date</th>
-
+                    <th>Оценка</th>
+                    <th>Дата</th>
+                    <th>Учитель</th>
                 </tr>
                 </thead>
                 <c:forEach items="${marks}" var="mark">
@@ -36,7 +36,11 @@
                     <tr>
                         <th>${mark.value}</th>
                         <td>${mark.date}</td>
-
+                        <td><c:forEach items="${teachers}" var="teacher">
+                            <c:if test="${teacher.id == mark.teacherId}">
+                                ${teacher.username}
+                            </c:if>
+                        </c:forEach> </td>
                     </tr>
                     </tbody>
                 </c:forEach>

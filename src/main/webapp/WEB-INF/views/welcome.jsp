@@ -22,6 +22,11 @@
     <br>
 </c:if>
 
+<c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
+    <a href="/teacher"><button type="button" class="btn btn-primary pull-right">Журнал</button></a>
+    <br>
+</c:if>
+
     <c:if test="${pageContext.request.userPrincipal.name != null}">
         <form id="logoutForm" method="POST" action="${contextPath}/logout">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

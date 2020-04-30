@@ -29,14 +29,30 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
+    @RequestMapping(value = "/teacher", method = RequestMethod.GET)
+    public String teacher(Model model) {
+        model.addAttribute("currentUser", securityService.findLoggedInUsername());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("pupils", userService.findAllCurrentTeacherPupils());
+
+        return "teacher";
+    }
+
     @RequestMapping(value = "/pupil", method = RequestMethod.GET)
     public String pupil(Model model) {
         model.addAttribute("currentUser", securityService.findLoggedInUsername());
         model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
         model.addAttribute("userForm", new User());
         model.addAttribute("marks", userService.findAllCurrentPupilMarks());
+        model.addAttribute("teachers", userService.findAllByRole(3L));
 
         return "pupil";
+    }
+
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public String error(Model model) {
+
+        return "error";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -44,7 +60,7 @@ public class UserController {
         model.addAttribute("userForm", new User());
         model.addAttribute("roles", userService.findAllRoles());
         model.addAttribute("classrooms", classroomService.findAll());
-        model.addAttribute("pupils", userService.findAllPupils());
+        model.addAttribute("pupils", userService.findAllByRole(1L));
 
         return "registration";
     }
@@ -55,25 +71,24 @@ public class UserController {
                                @RequestParam(required = true, defaultValue = "" ) Long classroomId,
                                @RequestParam(required = true, defaultValue = "" ) Long pupilId,
                                BindingResult bindingResult, Model model) {
+
         userValidator.validate(userForm, bindingResult);
 
-        if (bindingResult.hasErrors()) {
-            return "registration";
-        }
-
-        userService.save(userForm, roleId);
-
-        if (classroomId != 0) {
-            if (roleId == 1) {
+        if (!bindingResult.hasErrors()) {
+            userService.save(userForm, roleId);
+            if (roleId == 1 && classroomId != 0) {
                 userService.setPupilToTheClassroom(classroomId, userForm.getId());
-            }
-            if (roleId == 3) {
+            } else if (roleId == 2 && pupilId != 0) {
+                userService.setPupilToTheParent(userForm.getId(), pupilId);
+            } else if (roleId == 3 && classroomId != 0) {
                 userService.setTeacherToTheClassroom(classroomId, userForm.getId());
+            } else if (roleId != 4) {
+                userService.deleteUser(userForm.getId());
+                return "redirect:/error";
             }
-        }
-
-        if (roleId == 2) {
-            userService.setPupilToTheParent(userForm.getId(), pupilId);
+        } else {
+            userService.deleteUser(userForm.getId());
+            return "redirect:/error";
         }
 
         //securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
@@ -118,7 +133,7 @@ public class UserController {
         model.addAttribute("loggedUser", securityService.findLoggedInUsername());
 
         if (action.equals("delete")) {
-            userService.deleteUser(userId.toString());
+            userService.deleteUser(userId);
         }
 
         return "redirect:/admin";

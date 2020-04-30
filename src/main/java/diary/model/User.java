@@ -5,7 +5,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class User implements IUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,6 +18,15 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "birthday")
+    private String birthday;
+
     @Transient
     private String confirmPassword;
 
@@ -24,6 +34,9 @@ public class User {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+    @Column(name = "role")
+    private int role;
 
     public Long getId() {
         return id;
@@ -45,6 +58,18 @@ public class User {
         return password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -63,5 +88,17 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 }

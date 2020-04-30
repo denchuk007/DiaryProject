@@ -31,11 +31,14 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>Username</th>
-            <th>Password</th>
-            <th>Roles</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th>Логин</th>
+            <th>Пароль</th>
+            <th>Роль</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Дата рождения</th>
+            <th>Редактировать</th>
+            <th>Удалить</th>
         </tr>
         </thead>
         <c:forEach items="${listUsers}" var="user">
@@ -51,6 +54,9 @@
                         </c:forEach>
                     </c:if>
                 </td>
+                <td>${user.name}</td>
+                <td>${user.surname}</td>
+                <td>${user.birthday}</td>
                 <td>
                     <form action="${pageContext.request.contextPath}/admin" method="post">
                         <input type="hidden" name="userId" value="${user.id}"/>
@@ -61,6 +67,7 @@
                     <form action="${contextPath}/admin" method="post">
                         <input id="userId" type="hidden" name="userId" value="${user.id}"/>
                         <input id="action" type="hidden" name="action" value="delete"/>
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         <button type="submit">Delete</button>
                     </form>
                 </td>

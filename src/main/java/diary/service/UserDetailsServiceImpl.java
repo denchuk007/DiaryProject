@@ -1,6 +1,7 @@
 package diary.service;
 
 import diary.dao.UserDao;
+import diary.model.IUser;
 import diary.model.Role;
 import diary.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
