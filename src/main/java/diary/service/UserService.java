@@ -13,11 +13,7 @@ public interface UserService {
     User getByUserName(String username);
     List<User> findAllUsers();
     List<Role> findAllRoles();
-    void setTeacherToTheClassroom(Long classroomId, Long teacherId);
-    void setPupilToTheClassroom(Long classroomId, Long pupilId);
-    void setPupilToTheParent(Long parentId, Long pupilId);
     List<User> findAllByRole(Long roleId);
-    List<Mark> findAllCurrentPupilMarks();
     boolean deleteUser(Long userId);
     List<User> findAllCurrentTeacherPupils();
 }

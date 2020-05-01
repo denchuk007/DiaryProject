@@ -39,8 +39,7 @@
             <th>Дата рождения</th>
             <th>Класс</th>
             <th>Дети</th>
-            <th>Дет</th>
-            <th>Редактировать</th>
+            <th>Ред.</th>
             <th>Удалить</th>
         </tr>
         </thead>
@@ -49,7 +48,7 @@
             <tr>
                 <th>${user.id}</th>
                 <td>${user.username}</td>
-                <td>${user.password}</td>
+                <td>***</td>
                 <td>
                     <c:if test="${!empty user.roles}">
                         <c:forEach items="${user.roles}" var="role">
@@ -67,14 +66,9 @@
                     </c:forEach>
                 </td>
                 <td>
-                    <c:forEach items="${user.pupil}" var="pupil">
-                        ${pupil.name} ${pupil.surname}
-                    </c:forEach>
-                </td>
-                <td>
                     <form action="${pageContext.request.contextPath}/admin" method="post">
                         <input type="hidden" name="userId" value="${user.id}"/>
-                        <button type="submit">Edit</button>
+                        <button type="submit">Ред.</button>
                     </form>
                 </td>
                 <td>
@@ -82,7 +76,7 @@
                         <input id="userId" type="hidden" name="userId" value="${user.id}"/>
                         <input id="action" type="hidden" name="action" value="delete"/>
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                        <button type="submit">Delete</button>
+                        <button type="submit">Удалить</button>
                     </form>
                 </td>
             </tr>

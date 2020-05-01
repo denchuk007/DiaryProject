@@ -1,9 +1,10 @@
 package diary.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-@Table(name = "marks")
+@Table(name = "mark")
 public class Mark {
 
     @Id
@@ -22,8 +23,8 @@ public class Mark {
     @Column(name = "teacher_id")
     private String teacherId;
 
-    @Column(name = "pupil_id")
-    private String pupilId;
+    @ManyToOne(targetEntity = User.class)
+    private User pupil;
 
     public Long getId() {
         return id;
@@ -45,8 +46,8 @@ public class Mark {
         return teacherId;
     }
 
-    public String getPupilId() {
-        return pupilId;
+    public User getPupil() {
+        return pupil;
     }
 
     public void setId(Long id) {
@@ -69,19 +70,7 @@ public class Mark {
         this.teacherId = teacherId;
     }
 
-    public void setPupilId(String pupilId) {
-        this.pupilId = pupilId;
-    }
-
-    @Override
-    public String toString() {
-        return "Mark{" +
-                "id=" + id +
-                ", date='" + date + '\'' +
-                ", value=" + value +
-                ", subjectId=" + subjectId +
-                ", teacherId='" + teacherId + '\'' +
-                ", pupilId='" + pupilId + '\'' +
-                '}';
+    public void setPupil(User pupil) {
+        this.pupil = pupil;
     }
 }

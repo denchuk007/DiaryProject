@@ -35,23 +35,22 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-//    @OneToOne(fetch = FetchType.EAGER)
-//    @JoinTable(name = "classroom_user", joinColumns = @JoinColumn(name = "classroom_id"),
-//            inverseJoinColumns = @JoinColumn(name = "user_id"))
-//    private Classroom classroom;
-
     @ManyToOne
     @JoinTable(name = "classroom_user", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "classroom_id"))
     private Classroom classroom;
 
     @ManyToMany(mappedBy = "pupils", fetch = FetchType.EAGER)
-    private Set<User> pupil;
+    private Set<User> parents;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "parent_pupil", joinColumns = @JoinColumn(name = "parent_id"),
             inverseJoinColumns = @JoinColumn(name = "pupil_id"))
     private Set<User> pupils;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pupil_id")
+    private Set<Mark> marks;
 
     public Long getId() {
         return id;
@@ -93,8 +92,12 @@ public class User {
         return pupils;
     }
 
-    public Set<User> getPupil() {
-        return pupil;
+    public Set<User> getParents() {
+        return parents;
+    }
+
+    public Set<Mark> getMarks() {
+        return marks;
     }
 
     public void setId(Long id) {
@@ -137,7 +140,11 @@ public class User {
         this.pupils = pupils;
     }
 
-    public void setPupil(Set<User> pupil) {
-        this.pupil = pupil;
+    public void setParents(Set<User> parents) {
+        this.parents = parents;
+    }
+
+    public void setMarks(Set<Mark> marks) {
+        this.marks = marks;
     }
 }

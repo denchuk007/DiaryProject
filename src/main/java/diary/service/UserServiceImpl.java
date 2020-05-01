@@ -81,42 +81,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public void setTeacherToTheClassroom(Long classroomId, Long teacherId) {
-        entityManager.createNativeQuery("INSERT INTO classroom_teacher (classroom_id, teacher_id) VALUES (?,?)")
-                .setParameter(1, classroomId)
-                .setParameter(2, teacherId)
-                .executeUpdate();
-    }
-
-    @Override
-    @Transactional
-    public void setPupilToTheClassroom(Long classroomId, Long pupilId) {
-        entityManager.createNativeQuery("INSERT INTO classroom_pupil (classroom_id, pupil_id) VALUES (?,?)")
-                .setParameter(1, classroomId)
-                .setParameter(2, pupilId)
-                .executeUpdate();
-    }
-
-    @Override
-    @Transactional
-    public void setPupilToTheParent(Long parentId, Long pupilId) {
-        entityManager.createNativeQuery("INSERT INTO parent_pupil (parent_id, pupil_id) VALUES (?,?)")
-                .setParameter(1, parentId)
-                .setParameter(2, pupilId)
-                .executeUpdate();
-    }
-
-    @Override
     public List<User> findAllByRole(Long roleId) {
         Role role = roleDao.findOne(roleId);
         return userDao.findAllByRoles(role);
-    }
-
-    @Override
-    public List<Mark> findAllCurrentPupilMarks() {
-        User user = securityService.findLoggedInUser();
-        return markDao.findAllByPupilId(user.getId().toString());
     }
 
     @Override
@@ -131,19 +98,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAllCurrentTeacherPupils() {
+//        User user = securityService.findLoggedInUser();
+//        List<Object> results = entityManager.createNativeQuery(
+//                "SELECT classroom_id FROM classroom_teacher WHERE classroom_teacher.teacher_id = " + user.getId().toString()).getResultList();
+//        Long classroomId = Long.valueOf(results.get(0).toString());
+//
+//        List<Object> results2 = entityManager.createNativeQuery(
+//                "SELECT pupil_id FROM classroom_pupil WHERE classroom_pupil.classroom_id = " + classroomId.toString()).getResultList();
+//
+//        List<User> pupils = new ArrayList<>();
+//        for (Object pupilId : results2) {
+//            pupils.add(userDao.findById(Long.valueOf(pupilId.toString())));
+//        }
+//
+//        return pupils;
         User user = securityService.findLoggedInUser();
-        List<Object> results = entityManager.createNativeQuery(
-                "SELECT classroom_id FROM classroom_teacher WHERE classroom_teacher.teacher_id = " + user.getId().toString()).getResultList();
-        Long classroomId = Long.valueOf(results.get(0).toString());
-
-        List<Object> results2 = entityManager.createNativeQuery(
-                "SELECT pupil_id FROM classroom_pupil WHERE classroom_pupil.classroom_id = " + classroomId.toString()).getResultList();
-
-        List<User> pupils = new ArrayList<>();
-        for (Object pupilId : results2) {
-            pupils.add(userDao.findById(Long.valueOf(pupilId.toString())));
-        }
-
-        return pupils;
+        return userDao.findAllByClassroom(user.getClassroom());
     }
 }

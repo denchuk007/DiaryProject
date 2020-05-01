@@ -40,10 +40,10 @@ public class UserController {
 
     @RequestMapping(value = "/pupil", method = RequestMethod.GET)
     public String pupil(Model model) {
-        model.addAttribute("currentUser", securityService.findLoggedInUsername());
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
         model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
         model.addAttribute("userForm", new User());
-        model.addAttribute("marks", userService.findAllCurrentPupilMarks());
+        //model.addAttribute("marks", userService.findAllCurrentPupilMarks());
         model.addAttribute("teachers", userService.findAllByRole(3L));
 
         return "pupil";
@@ -93,7 +93,7 @@ public class UserController {
 
         //securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
 
-        return "redirect:/welcome";
+        return "redirect:/admin";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)

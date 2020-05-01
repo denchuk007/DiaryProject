@@ -1,5 +1,6 @@
 package diary.dao;
 
+import diary.model.Classroom;
 import diary.model.Role;
 import diary.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,7 @@ public interface UserDao extends JpaRepository<User, Long> {
     User getByUsername(String username);
     List<User> findAll();
     List<User> findAllByRoles(Role role);
+    List<User> findAllByClassroom(Classroom classroom);
     List<User> findAllById(Long id);
     User findById(Long id);
     void deleteById(Long id);
