@@ -1,5 +1,6 @@
 package diary.service;
 
+import diary.dao.ClassroomDao;
 import diary.dao.MarkDao;
 import diary.dao.RoleDao;
 import diary.dao.UserDao;
@@ -30,6 +31,9 @@ public class UserServiceImpl implements UserService {
     private MarkDao markDao;
 
     @Autowired
+    private ClassroomDao classroomDao;
+
+    @Autowired
     private SecurityService securityService;
 
     @Autowired
@@ -39,11 +43,20 @@ public class UserServiceImpl implements UserService {
     private EntityManager entityManager;
 
     @Override
-    public void save(User user, Long roleId) {
+    public void save(User user, Long roleId, Long classroomId, Long pupilId) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Set<Role> roles = new HashSet<>();
         roles.add(roleDao.getOne(roleId));
         user.setRoles(roles);
+        if (classroomId != 0 && pupilId == 0) {
+            user.setClassroom(classroomDao.findOne(classroomId));
+        }
+
+        if (pupilId != 0) {
+            Set<User> set = new HashSet<>();
+            set.add(userDao.findOne(pupilId));
+            user.setPupils(set);
+        }
         userDao.save(user);
     }
 

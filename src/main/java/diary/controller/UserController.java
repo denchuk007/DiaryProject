@@ -75,13 +75,13 @@ public class UserController {
         userValidator.validate(userForm, bindingResult);
 
         if (!bindingResult.hasErrors()) {
-            userService.save(userForm, roleId);
+            userService.save(userForm, roleId, classroomId, pupilId);
             if (roleId == 1 && classroomId != 0) {
-                userService.setPupilToTheClassroom(classroomId, userForm.getId());
+               // userService.setPupilToTheClassroom(classroomId, userForm.getId());
             } else if (roleId == 2 && pupilId != 0) {
-                userService.setPupilToTheParent(userForm.getId(), pupilId);
+                //userService.setPupilToTheParent(userForm.getId(), pupilId);
             } else if (roleId == 3 && classroomId != 0) {
-                userService.setTeacherToTheClassroom(classroomId, userForm.getId());
+                //userService.setTeacherToTheClassroom(classroomId, userForm.getId());
             } else if (roleId != 4) {
                 userService.deleteUser(userForm.getId());
                 return "redirect:/error";

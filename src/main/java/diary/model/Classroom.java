@@ -1,9 +1,10 @@
 package diary.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-@Table(name = "classrooms")
+@Table(name = "classroom")
 public class Classroom {
 
     @Id
@@ -15,6 +16,9 @@ public class Classroom {
 
     @Column(name = "word")
     private String word;
+
+    @OneToMany(mappedBy = "classroom")
+    private Set<User> user;
 
     public Long getId() {
         return id;
@@ -38,6 +42,14 @@ public class Classroom {
 
     public void setWord(String word) {
         this.word = word;
+    }
+
+    public Set<User> getUser() {
+        return user;
+    }
+
+    public void setUser(Set<User> user) {
+        this.user = user;
     }
 
     @Override

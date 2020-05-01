@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserService {
 
-    void save(User user, Long roleId);
+    void save(User user, Long roleId, Long classroomId, Long pupilId);
     User findByUsername(String username);
     User getByUserName(String username);
     List<User> findAllUsers();

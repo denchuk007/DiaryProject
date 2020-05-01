@@ -37,6 +37,9 @@
             <th>Имя</th>
             <th>Фамилия</th>
             <th>Дата рождения</th>
+            <th>Класс</th>
+            <th>Дети</th>
+            <th>Дет</th>
             <th>Редактировать</th>
             <th>Удалить</th>
         </tr>
@@ -57,6 +60,17 @@
                 <td>${user.name}</td>
                 <td>${user.surname}</td>
                 <td>${user.birthday}</td>
+                <td>${user.classroom.digit}${user.classroom.word}</td>
+                <td>
+                    <c:forEach items="${user.pupils}" var="pupil">
+                        ${pupil.name} ${pupil.surname}
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach items="${user.pupil}" var="pupil">
+                        ${pupil.name} ${pupil.surname}
+                    </c:forEach>
+                </td>
                 <td>
                     <form action="${pageContext.request.contextPath}/admin" method="post">
                         <input type="hidden" name="userId" value="${user.id}"/>
