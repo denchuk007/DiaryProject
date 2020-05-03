@@ -22,30 +22,28 @@
     </h4>
 
     <table class="table table-bordered">
-        <c:if test="${!empty marks}">
+
             <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th>Оценка</th>
                     <th>Дата</th>
                     <th>Учитель</th>
+                    <th>Предмет</th>
                 </tr>
                 </thead>
-                <c:forEach items="${marks}" var="mark">
+                <c:forEach items="${currentUser.marks}" var="mark">
                     <tbody>
                     <tr>
                         <th>${mark.value}</th>
                         <td>${mark.date}</td>
-                        <td><c:forEach items="${teachers}" var="teacher">
-                            <c:if test="${teacher.id == mark.teacherId}">
-                                ${teacher.username}
-                            </c:if>
-                        </c:forEach> </td>
+                        <td>${mark.teacher.name}${mark.teacher.surname}</td>
+                        <td>${mark.subject.title}</td>
                     </tr>
                     </tbody>
                 </c:forEach>
             </table>
-        </c:if>
+
     </table>
 
 </c:if>

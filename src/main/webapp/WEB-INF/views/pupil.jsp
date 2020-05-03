@@ -29,6 +29,7 @@
                     <th>Оценка</th>
                     <th>Дата</th>
                     <th>Учитель</th>
+                    <th>Предмет</th>
                 </tr>
                 </thead>
                 <c:forEach items="${currentUser.marks}" var="mark">
@@ -36,6 +37,8 @@
                     <tr>
                         <th>${mark.value}</th>
                         <td>${mark.date}</td>
+                        <td>${mark.teacher.name}${mark.teacher.surname}</td>
+                        <td>${mark.subject.title}</td>
                     </tr>
                     </tbody>
                 </c:forEach>

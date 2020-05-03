@@ -29,16 +29,16 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
+            <th>Имя, Фамилия</th>
+            <th>Поставить оценку</th>
         </tr>
         </thead>
         <c:forEach items="${pupils}" var="pupil">
             <tbody>
             <tr>
                 <th>${pupil.id}</th>
-                <td>${pupil.name}</td>
-                <td>${pupil.surname}</td>
+                <td>${pupil.name} ${pupil.surname}</td>
+                <td><a href="/new-mark/${pupil.id}"><button class="btn btn-primary">+</button></a></td>
             </tr>
             </tbody>
         </c:forEach>

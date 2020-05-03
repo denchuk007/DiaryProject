@@ -1,7 +1,7 @@
 package diary.model;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.sql.Date;
 
 @Entity
 @Table(name = "mark")
@@ -12,16 +12,16 @@ public class Mark {
     private Long id;
 
     @Column(name = "date")
-    private String date;
+    private Date date;
 
     @Column(name = "mark")
     private Long value;
 
-    @Column(name = "subject_id")
-    private Long subjectId;
+    @OneToOne(targetEntity = Subject.class)
+    private Subject subject;
 
-    @Column(name = "teacher_id")
-    private String teacherId;
+    @OneToOne(targetEntity = User.class)
+    private User teacher;
 
     @ManyToOne(targetEntity = User.class)
     private User pupil;
@@ -30,7 +30,7 @@ public class Mark {
         return id;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -38,12 +38,12 @@ public class Mark {
         return value;
     }
 
-    public Long getSubjectId() {
-        return subjectId;
+    public Subject getSubject() {
+        return subject;
     }
 
-    public String getTeacherId() {
-        return teacherId;
+    public User getTeacher() {
+        return teacher;
     }
 
     public User getPupil() {
@@ -54,7 +54,7 @@ public class Mark {
         this.id = id;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -62,12 +62,12 @@ public class Mark {
         this.value = value;
     }
 
-    public void setSubjectId(Long subjectId) {
-        this.subjectId = subjectId;
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
-    public void setTeacherId(String teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
     }
 
     public void setPupil(User pupil) {

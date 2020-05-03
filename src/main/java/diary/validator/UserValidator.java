@@ -39,10 +39,10 @@ public class UserValidator implements Validator {
             errors.rejectValue("surname", "Некорректный ввод фамилии");
         }
 
-        Matcher matcher = Pattern.compile("^\\d{4}\\-\\d{2}\\-\\d{2}$").matcher(user.getBirthday());
-        if (!matcher.find()) {
-            errors.rejectValue("birthday", "Некорректный ввод дня рождения");
-        }
+//        Matcher matcher = Pattern.compile("^\\d{4}\\-\\d{2}\\-\\d{2}$").matcher(user.getBirthday());
+//        if (!matcher.find()) {
+//            errors.rejectValue("birthday", "Некорректный ввод дня рождения");
+//        }
 
         if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");

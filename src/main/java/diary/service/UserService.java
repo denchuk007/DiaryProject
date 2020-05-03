@@ -10,6 +10,7 @@ public interface UserService {
 
     void save(User user, Long roleId, Long classroomId, Long pupilId);
     User findByUsername(String username);
+    User findById(Long id);
     User getByUserName(String username);
     List<User> findAllUsers();
     List<Role> findAllRoles();

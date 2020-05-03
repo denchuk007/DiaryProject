@@ -1,7 +1,7 @@
 package diary.model;
 
 import javax.persistence.*;
-import java.util.List;
+import java.sql.Date;
 import java.util.Set;
 
 @Entity
@@ -25,7 +25,7 @@ public class User {
     private String surname;
 
     @Column(name = "birthday")
-    private String birthday;
+    private Date birthday;
 
     @Transient
     private String confirmPassword;
@@ -72,7 +72,7 @@ public class User {
         return surname;
     }
 
-    public String getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
@@ -128,7 +128,7 @@ public class User {
         this.surname = surname;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
