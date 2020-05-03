@@ -25,7 +25,12 @@
 <div class="container">
 
     <form:form method="POST" modelAttribute="userForm" class="form-signin" name="form1">
+        <c:if test="${userForm.name == null}">
         <h2 class="form-signin-heading">Создание аккаунта</h2>
+        </c:if>
+        <c:if test="${userForm.name != null}">
+            <h2 class="form-signin-heading">Редактирование акканута</h2>
+        </c:if>
         <spring:bind path="username">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="username" class="form-control" placeholder="Логин"
@@ -109,7 +114,8 @@
         <input id="classroomId" type="hidden" name="classroomId" value="0"/>
         <input id="pupilId" type="hidden" name="pupilId" value="0"/>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Зарегистрировать</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Принять</button>
+
     </form:form>
 
 </div>

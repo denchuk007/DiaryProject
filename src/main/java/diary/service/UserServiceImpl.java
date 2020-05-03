@@ -4,7 +4,6 @@ import diary.dao.ClassroomDao;
 import diary.dao.MarkDao;
 import diary.dao.RoleDao;
 import diary.dao.UserDao;
-import diary.model.Mark;
 import diary.model.Role;
 import diary.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -57,6 +55,11 @@ public class UserServiceImpl implements UserService {
             set.add(userDao.findOne(pupilId));
             user.setPupils(set);
         }
+        userDao.save(user);
+    }
+
+    @Override
+    public void update(User user) {
         userDao.save(user);
     }
 

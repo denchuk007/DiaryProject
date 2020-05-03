@@ -65,18 +65,13 @@
                         ${pupil.name} ${pupil.surname}
                     </c:forEach>
                 </td>
-                <td>
-                    <form action="${pageContext.request.contextPath}/admin" method="post">
-                        <input type="hidden" name="userId" value="${user.id}"/>
-                        <button type="submit">Ред.</button>
-                    </form>
-                </td>
+                <td><a href="/edit/${user.id}"><button class="btn btn-primary">Ред.</button></a></td>
                 <td>
                     <form action="${contextPath}/admin" method="post">
                         <input id="userId" type="hidden" name="userId" value="${user.id}"/>
                         <input id="action" type="hidden" name="action" value="delete"/>
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                        <button type="submit">Удалить</button>
+                        <button type="submit" class="btn btn-primary">Удалить</button>
                     </form>
                 </td>
             </tr>

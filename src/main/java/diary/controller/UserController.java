@@ -2,17 +2,16 @@ package diary.controller;
 
 import diary.service.ClassroomService;
 import diary.service.SecurityService;
+import diary.service.SubjectService;
 import diary.service.UserService;
 import diary.validator.UserValidator;
 import diary.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UserController {
@@ -25,6 +24,9 @@ public class UserController {
 
     @Autowired
     private ClassroomService classroomService;
+
+    @Autowired
+    private SubjectService subjectService;
 
     @Autowired
     private UserValidator userValidator;
@@ -43,8 +45,8 @@ public class UserController {
         model.addAttribute("currentUser", securityService.findLoggedInUser());
         model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
         model.addAttribute("userForm", new User());
-        //model.addAttribute("marks", userService.findAllCurrentPupilMarks());
         model.addAttribute("teachers", userService.findAllByRole(3L));
+        model.addAttribute("subjects", subjectService.findAll());
 
         return "pupil";
     }
@@ -53,6 +55,45 @@ public class UserController {
     public String error(Model model) {
 
         return "error";
+    }
+
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String edit(@PathVariable("id") Long id, Model model) {
+        User user = userService.findById(id);
+        user.setPassword("");
+        model.addAttribute("userForm", user);
+        model.addAttribute("roles", userService.findAllRoles());
+        model.addAttribute("classrooms", classroomService.findAll());
+        model.addAttribute("pupils", userService.findAllByRole(1L));
+
+        return "registration";
+    }
+
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    public String edit(@ModelAttribute("userForm") User userForm,
+                       @RequestParam(required = true, defaultValue = "" ) Long roleId,
+                       @RequestParam(required = true, defaultValue = "" ) Long classroomId,
+                       @RequestParam(required = true, defaultValue = "" ) Long pupilId,
+                       BindingResult bindingResult, Model model) {
+
+        if (!bindingResult.hasErrors()) {
+            userService.save(userForm, roleId, classroomId, pupilId);
+            if ((roleId == 1 && classroomId == 0)) {
+                // userService.setPupilToTheClassroom(classroomId, userForm.getId());
+            } else if (roleId == 2 && pupilId != 0) {
+                //userService.setPupilToTheParent(userForm.getId(), pupilId);
+            } else if (roleId == 3 && classroomId != 0) {
+                //userService.setTeacherToTheClassroom(classroomId, userForm.getId());
+            } else if (roleId != 4) {
+                userService.deleteUser(userForm.getId());
+                return "redirect:/error";
+            }
+        } else {
+            userService.deleteUser(userForm.getId());
+            return "redirect:/error";
+        }
+
+        return "redirect:/admin";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -76,7 +117,7 @@ public class UserController {
 
         if (!bindingResult.hasErrors()) {
             userService.save(userForm, roleId, classroomId, pupilId);
-            if (roleId == 1 && classroomId != 0) {
+            if ((roleId == 1 && classroomId == 0)) {
                // userService.setPupilToTheClassroom(classroomId, userForm.getId());
             } else if (roleId == 2 && pupilId != 0) {
                 //userService.setPupilToTheParent(userForm.getId(), pupilId);
