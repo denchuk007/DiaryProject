@@ -62,8 +62,12 @@
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 
 <script>
-    $("#subjectsSelect").change(function(){
-        alert(1);
+    $("#subjectsSelect").change(function(event){
+        console.log(event);
+        $.ajax("/pupil", {
+            method: 'GET',
+
+        });
         $('#table tr:last').after('<tr>...</tr><tr>...</tr>');
     });
 </script>

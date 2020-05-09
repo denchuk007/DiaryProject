@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class MarkServiceImpl implements MarkService {
@@ -26,5 +27,10 @@ public class MarkServiceImpl implements MarkService {
     @Override
     public List<Mark> findAll() {
         return markDao.findAll();
+    }
+
+    @Override
+    public List<Mark> findAllById(Long id) {
+        return markDao.findAllById(id);
     }
 }
