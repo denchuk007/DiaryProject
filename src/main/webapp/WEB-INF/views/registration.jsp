@@ -78,11 +78,24 @@
             </div>
         </spring:bind>
 
-        <select id="roles"  onchange="document.getElementById('roleId').value= this.value; ">
+        <select id="roles" class="selectpicker" onchange="document.getElementById('roleId').value= this.value; ">
             <c:if test="${roles != null}">
                 <option selected>Выберите роль</option>
                 <c:forEach items="${roles}" var="role">
-                    <option value="${role.id}">${role.name}</option>
+                    <option value="${role.id}">
+                        <c:if test="${role.name == 'ROLE_PUPIL'}">
+                            Ученик
+                        </c:if>
+                        <c:if test="${role.name == 'ROLE_PARENT'}">
+                            Родитель
+                        </c:if>
+                        <c:if test="${role.name == 'ROLE_TEACHER'}">
+                            Учитель
+                        </c:if>
+                        <c:if test="${role.name == 'ROLE_ADMIN'}">
+                            Администратор
+                        </c:if>
+                    </option>
                 </c:forEach>
             </c:if>
         </select>
@@ -123,21 +136,31 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 
+<!-- Selectpicker -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
 
 <script>
     $(document).ready(function(){
         $("#classrooms").hide();
         $("#pupils").hide();
+
+        $('#roles').selectpicker({
+            liveSearch: true,
+            width: "100%",
+            maxOptions: 1
+        });
     });
 
     $("#roles").change(function(){
-        $("#classrooms").hide();
-        $("#pupils").hide();
+        $("#classrooms").selectpicker('destroy');
+        $("#pupils").selectpicker('destroy');
         if ($("#roles").val() == 1 || $("#roles").val() == 3) {
-            $("#classrooms").css("display","");
+            $("#classrooms").selectpicker();
         }
         else if ($("#roles").val() == 2) {
-            $("#pupils").css("display","");
+            $("#pupils").selectpicker();
         }
     });
 </script>

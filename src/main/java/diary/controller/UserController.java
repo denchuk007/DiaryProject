@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -34,80 +35,83 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
-//    @RequestMapping(value = "/pupil/{id}", method = RequestMethod.GET)
-//    public String pupil(@PathVariable("id") Long id, Model model) {
-//        User currentUser = securityService.findLoggedInUser();
-//        List<Mark> marks = new ArrayList<>();
-//        for (Mark mark : currentUser.getMarks()) {
-//            if (mark.getSubject().getId().equals(id)) {
-//                marks.add(mark);
-//            }
-//        }
-//        model.addAttribute("currentUserMarks", marks);
-//        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
-//        model.addAttribute("userForm", new User());
-//        model.addAttribute("teachers", userService.findAllByRole(3L));
-//        model.addAttribute("subjects", subjectService.findAll());
-//
-//        return "pupil";
-//    }
+    @RequestMapping(value = "/parent", method = RequestMethod.GET)
+    public String parent(Model model) {
+        User currentUser =  securityService.findLoggedInUser();
+        User[] pupils = new User[currentUser.getPupils().size()];
+        Iterator<User> pupilIterator = currentUser.getPupils().iterator();
+        for (int i = 0; i < pupils.length; i++) {
+            pupils[i] = pupilIterator.next();
+        }
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("currentUserPupils", pupils);
 
-    @RequestMapping(value = "/pupil/{month}/{year}", method = RequestMethod.GET)
-    public String pupil(@PathVariable("month") int month,
-                        @PathVariable("year") int year, Model model) {
-        User currentUser = securityService.findLoggedInUser();
-        List<Mark> marks = new ArrayList<>();
+        return "parent";
+    }
+
+    @RequestMapping(value = "/parent/{pupilNumber}", method = RequestMethod.GET)
+    public String parent(@PathVariable("pupilNumber") int pupilNumber, Model model) {
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("pupilNumber", pupilNumber);
+
+        return "pupil";
+    }
+
+    @RequestMapping(value = "/parent/{pupilNumber}/{month}/{year}", method = RequestMethod.GET)
+    public String parent(@PathVariable("month") int month,
+                        @PathVariable("year") int year,
+                        @PathVariable("pupilNumber") int pupilNumber,
+                        Model model) {
+
         Map<String, List<Mark>> table = new HashMap<>();
         int lengthOfMonth = LocalDate.of(year, month, 1).lengthOfMonth();
 
-        for (Mark mark : currentUser.getMarks()) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(mark.getDate());
-            int m = calendar.get(Calendar.MONTH) + 1;
-            int y = calendar.get(Calendar.YEAR);
-            if (m == month && y == year) {
-                marks.add(mark);
-            }
-        }
-
-        for (Mark mark : marks) {
-            String subjectTitle = mark.getSubject().getTitle();
-            List<Mark> tableList;
-            if (table.get(subjectTitle) != null) {
-                tableList = table.get(subjectTitle);
-            } else {
-                tableList = new ArrayList<>();
-            }
-            tableList.add(mark);
-            table.put(subjectTitle, tableList);
-        }
-
-        String[][] finalTable = new String[table.size()][32];
-        Iterator<String> iterator = table.keySet().iterator();
-        for (int i = 0; i < table.size(); i++) {
-            finalTable[i][0] = iterator.next();
-            for (int j = 1; j <= lengthOfMonth; j++) {
-                Calendar calendar = Calendar.getInstance();
-                if (!table.get(finalTable[i][0]).isEmpty()) {
-                    for (Mark mark : table.get(finalTable[i][0])) {
-                        calendar.setTime(mark.getDate());
-
-                        int day = calendar.get(Calendar.DAY_OF_MONTH);
-                        if (day == j) {
-                            finalTable[i][j] = mark.getValue().toString();
-                            table.get(finalTable[i][0]).remove(mark);
-                            break;
-                        }
-                        //finalTable[i][j] = "-";
-                    }
-                }
-            }
-        }
+        String[] subjectsTitle = getPupilMarks(month, year, table, lengthOfMonth, pupilNumber).first;
+        Mark[][] marksTable = getPupilMarks(month, year, table, lengthOfMonth, pupilNumber).second;
 
         model.addAttribute("currentUser", securityService.findLoggedInUsername());
         model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
         model.addAttribute("userForm", new User());
-        model.addAttribute("marksTable", finalTable);
+        model.addAttribute("marksTable", marksTable);
+        model.addAttribute("subjectsTitle", subjectsTitle);
+        model.addAttribute("subjectsCount", table.size());
+        model.addAttribute("selectedMonth", month);
+        model.addAttribute("selectedYear", year);
+        model.addAttribute("lengthOfMonth", lengthOfMonth);
+        model.addAttribute("pupilNumber", pupilNumber);
+
+        return "pupil";
+    }
+
+    @RequestMapping(value = "/pupil", method = RequestMethod.GET)
+    public String pupil(Model model) {
+        User currentUser = securityService.findLoggedInUser();
+        model.addAttribute("currentUserMarks", currentUser.getMarks());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("userForm", new User());
+        model.addAttribute("teachers", userService.findAllByRole(3L));
+        model.addAttribute("subjects", subjectService.findAll());
+
+        return "pupil";
+    }
+
+    @RequestMapping(value = "/pupil/{month}/{year}", method = RequestMethod.GET)
+    public String pupil(@PathVariable("month") int month,
+                        @PathVariable("year") int year, Model model) {
+
+        Map<String, List<Mark>> table = new HashMap<>();
+        int lengthOfMonth = LocalDate.of(year, month, 1).lengthOfMonth();
+
+        String[] subjectsTitle = getPupilMarks(month, year, table, lengthOfMonth, 0).first;
+        Mark[][] marksTable = getPupilMarks(month, year, table, lengthOfMonth, 0).second;
+
+        model.addAttribute("currentUser", securityService.findLoggedInUsername());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("userForm", new User());
+        model.addAttribute("marksTable", marksTable);
+        model.addAttribute("subjectsTitle", subjectsTitle);
         model.addAttribute("subjectsCount", table.size());
         model.addAttribute("selectedMonth", month);
         model.addAttribute("selectedYear", year);
@@ -123,18 +127,6 @@ public class UserController {
         model.addAttribute("pupils", userService.findAllCurrentTeacherPupils());
 
         return "teacher";
-    }
-
-    @RequestMapping(value = "/pupil", method = RequestMethod.GET)
-    public String pupil(Model model) {
-        User currentUser = securityService.findLoggedInUser();
-        model.addAttribute("currentUserMarks", currentUser.getMarks());
-        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
-        model.addAttribute("userForm", new User());
-        model.addAttribute("teachers", userService.findAllByRole(3L));
-        model.addAttribute("subjects", subjectService.findAll());
-
-        return "pupil";
     }
 
     @RequestMapping(value = "/error", method = RequestMethod.GET)
@@ -264,5 +256,64 @@ public class UserController {
         }
 
         return "redirect:/admin";
+    }
+
+
+    public Pair<String[], Mark[][]> getPupilMarks(int month, int year, Map<String, List<Mark>> table, int lengthOfMonth, int pupilNumber) {
+        User currentUser = securityService.findLoggedInUser();
+        if (pupilNumber != 0) {
+            Iterator<User> pupilIterator = currentUser.getPupils().iterator();
+            for (int i = 0; i < pupilNumber - 1; i++) {
+                pupilIterator.next();
+            }
+            currentUser = pupilIterator.next();
+        }
+
+        List<Mark> marks = new ArrayList<>();
+
+        for (Mark mark : currentUser.getMarks()) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(mark.getDate());
+            int m = calendar.get(Calendar.MONTH) + 1;
+            int y = calendar.get(Calendar.YEAR);
+            if (m == month && y == year) {
+                marks.add(mark);
+            }
+        }
+
+        for (Mark mark : marks) {
+            String subjectTitle = mark.getSubject().getTitle();
+            List<Mark> tableList;
+            if (table.get(subjectTitle) != null) {
+                tableList = table.get(subjectTitle);
+            } else {
+                tableList = new ArrayList<>();
+            }
+            tableList.add(mark);
+            table.put(subjectTitle, tableList);
+        }
+
+        String[] subjectsTitle = new String[table.size()];
+        Mark[][] marksTable = new Mark[table.size()][lengthOfMonth];
+        Iterator<String> iterator = table.keySet().iterator();
+        for (int i = 0; i < table.size(); i++) {
+            subjectsTitle[i] = iterator.next();
+            for (int j = 1; j <= lengthOfMonth; j++) {
+                Calendar calendar = Calendar.getInstance();
+                if (!table.get(subjectsTitle[i]).isEmpty()) {
+                    for (Mark mark : table.get(subjectsTitle[i])) {
+                        calendar.setTime(mark.getDate());
+
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        if (day == j) {
+                            marksTable[i][j] = mark;
+                            table.get(subjectsTitle[i]).remove(mark);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return new Pair(subjectsTitle, marksTable);
     }
 }

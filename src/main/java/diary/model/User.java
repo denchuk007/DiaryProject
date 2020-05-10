@@ -40,9 +40,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "classroom_id"))
     private Classroom classroom;
 
-    @ManyToMany(mappedBy = "pupils", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "pupils")
     private Set<User> parents;
 
+    @OrderBy("id")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "parent_pupil", joinColumns = @JoinColumn(name = "parent_id"),
             inverseJoinColumns = @JoinColumn(name = "pupil_id"))

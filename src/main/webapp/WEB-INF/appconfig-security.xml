@@ -11,7 +11,7 @@
         <intercept-url pattern="/" access="hasAnyRole('ROLE_PUPIL', 'ROLE_PARENT', 'ROLE_TEACHER', 'ROLE_ADMIN')"/>
         <intercept-url pattern="/welcome" access="hasAnyRole('ROLE_PUPIL', 'ROLE_PARENT', 'ROLE_TEACHER', 'ROLE_ADMIN')"/>
         <intercept-url pattern="/teacher" access="hasRole('ROLE_TEACHER')"/>
-        <intercept-url pattern="/pupil" access="hasRole('ROLE_PUPIL')"/>
+        <intercept-url pattern="/pupil" access="hasAnyRole('ROLE_PUPIL', 'ROLE_PARENT')"/>
         <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/registration" access="hasRole('ROLE_ADMIN')"/>
 

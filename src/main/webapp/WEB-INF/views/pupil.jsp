@@ -16,7 +16,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 
 </head>
-<body>
+<body style="background-color: white">
 
 <c:if test="${pageContext.request.userPrincipal.name != null}">
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
@@ -24,10 +24,11 @@
     </form>
 
     <h4 class="text-right">
-        Вы вошли как ${currentUser.username}(${currentUserAuthorities}) | <a onclick="document.forms['logoutForm'].submit()">Выйти</a>
+        Вы вошли как ${currentUser.username}(${currentUserAuthorities}) | <a onclick="document.forms['logoutForm'].submit()" href="#">Выйти</a>
     </h4>
+</c:if>
 
-    <select class="text-left" id="monthSelect">
+    <select class="text-left selectpicker" id="monthSelect">
         <option selected>Выберите месяц</option>
         <option value="1">Январь</option>
         <option value="2">Февраль</option>
@@ -43,16 +44,16 @@
         <option value="12">Декабрь</option>
     </select>
 
-    <select class="text-left" id="yearSelect">
+    <select class="text-left selectpicker" id="yearSelect">
         <option selected>Выберите год</option>
     </select>
 
-    <button id="okButton">Перейти</button>
+    <button class="btn btn-primary" id="okButton">Перейти</button>
 
     <br>
     <br>
 
-            <table class="table table-bordered" id="table">
+        <table class="table table-striped table-bordered" id="table">
                 <thead>
                 <tr>
                     <th>Предмет</th>
@@ -66,19 +67,28 @@
                     <c:if test="${subjectsCount != null && subjectsCount != 0}">
                     <c:forEach begin="0" end="${subjectsCount - 1}" step="1" var="i">
                     <tr>
-                        <c:forEach begin="0" end="${lengthOfMonth}" step="1" var="j">
-                             <td>${marksTable[i][j]}</td>
+                        <td>${subjectsTitle[i]}</td>
+                        <c:forEach begin="1" end="${lengthOfMonth}" step="1" var="j">
+                            <td>
+                                <p title="Оценка поставлена учителем: ${marksTable[i][j].teacher.name}${marksTable[i][j].teacher.surname}}">
+                                    ${marksTable[i][j].value}
+                                </p>
+                            </td>
                         </c:forEach>
                     </tr>
                     </c:forEach>
                     </c:if>
                     </tbody>
-            </table>
-</c:if>
+        </table>
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+
+<!-- Selectpicker -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
 
 <script>
 
@@ -98,13 +108,27 @@
             $("#monthSelect").val(${selectedMonth});
             $("#yearSelect").val(${selectedYear});
         }
+
+        if (location.pathname == "/parent/${pupilNumber}") {
+            $("#monthSelect").val(date.getMonth() + 1);
+            $("#yearSelect").val(date.getFullYear());
+            $("#okButton").click();
+        } else {
+            $("#monthSelect").val(${selectedMonth});
+            $("#yearSelect").val(${selectedYear});
+        }
     });
 
     $("#okButton").click(function () {
-        if($("#yearSelect").val() != null || $("#monthSelect").val() != null) {
-            location.href = "/pupil/" + $("#monthSelect").val() + "/" + $("#yearSelect").val();
+        if ($("#yearSelect").val() != null || $("#monthSelect").val() != null) {
+            if(location.pathname.includes("/parent")) {
+                location.href = "/parent/" + ${pupilNumber} + "/" + $("#monthSelect").val() + "/" + $("#yearSelect").val();
+            } else {
+                location.href = "/pupil/" + $("#monthSelect").val() + "/" + $("#yearSelect").val();
+            }
         }
-    })
+    });
 
 </script>
+
 </html>
