@@ -26,6 +26,13 @@
     <h4 class="text-right">
         Вы вошли как ${currentUser.username}(${currentUserAuthorities}) | <a onclick="document.forms['logoutForm'].submit()" href="#">Выйти</a>
     </h4>
+
+<c:if test="${currentUser.roles.iterator().next().name != 'ROLE_PUPIL'}">
+    <h4 class="text-left">
+        Оценки ученика
+    </h4>
+</c:if>
+
 </c:if>
 
     <select class="text-left selectpicker" id="monthSelect">
@@ -117,12 +124,23 @@
             $("#monthSelect").val(${selectedMonth});
             $("#yearSelect").val(${selectedYear});
         }
+
+        if (location.pathname == "/teacher/${pupilId}") {
+            $("#monthSelect").val(date.getMonth() + 1);
+            $("#yearSelect").val(date.getFullYear());
+            $("#okButton").click();
+        } else {
+            $("#monthSelect").val(${selectedMonth});
+            $("#yearSelect").val(${selectedYear});
+        }
     });
 
     $("#okButton").click(function () {
         if ($("#yearSelect").val() != null || $("#monthSelect").val() != null) {
             if(location.pathname.includes("/parent")) {
                 location.href = "/parent/" + ${pupilNumber} + "/" + $("#monthSelect").val() + "/" + $("#yearSelect").val();
+            } else if (location.pathname.includes("/teacher")) {
+                location.href = "/teacher/" + ${pupilId} + "/" + $("#monthSelect").val() + "/" + $("#yearSelect").val();
             } else {
                 location.href = "/pupil/" + $("#monthSelect").val() + "/" + $("#yearSelect").val();
             }

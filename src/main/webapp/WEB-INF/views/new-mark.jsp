@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" style="width: 25%">
 
     <form:form method="POST" modelAttribute="mark" class="form-signin">
         <h2 class="form-signin-heading">Оценка для ученика ${pupil.name} ${pupil.surname}</h2>
@@ -22,6 +22,13 @@
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="value" class="form-control" placeholder="Оценка"></form:input>
                 <form:errors path="value"></form:errors>
+            </div>
+        </spring:bind>
+
+        <spring:bind path="date">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="date" path="date" class="form-control" placeholder="Дата"></form:input>
+                <form:errors path="date"></form:errors>
             </div>
         </spring:bind>
 
@@ -36,6 +43,8 @@
                 </c:forEach>
             </c:if>
         </select>
+        <br>
+        <br>
 
         <input id="subjectId" type="hidden" name="subjectId" value="0"/>
 
@@ -46,5 +55,20 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+
+<!-- Selectpicker -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#subjects').selectpicker({
+            liveSearch: true,
+            width: "100%",
+            maxOptions: 1
+        });
+    });
+</script>
 </body>
 </html>

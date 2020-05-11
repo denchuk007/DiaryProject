@@ -1,6 +1,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
@@ -147,7 +149,6 @@
         $("#pupils").hide();
 
         $('#roles').selectpicker({
-            liveSearch: true,
             width: "100%",
             maxOptions: 1
         });
@@ -157,12 +158,20 @@
         $("#classrooms").selectpicker('destroy');
         $("#pupils").selectpicker('destroy');
         if ($("#roles").val() == 1 || $("#roles").val() == 3) {
-            $("#classrooms").selectpicker();
+            $('#classrooms').selectpicker({
+                width: "100%",
+                maxOptions: 1
+            });
         }
         else if ($("#roles").val() == 2) {
-            $("#pupils").selectpicker();
+            $('#pupils').selectpicker({
+                liveSearch: true,
+                width: "100%",
+                maxOptions: 1
+            });
         }
     });
+
 </script>
 </body>
 </html>

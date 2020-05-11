@@ -4,6 +4,7 @@ import diary.dao.ClassroomDao;
 import diary.dao.MarkDao;
 import diary.dao.RoleDao;
 import diary.dao.UserDao;
+import diary.model.Classroom;
 import diary.model.Role;
 import diary.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,11 @@ public class UserServiceImpl implements UserService {
     public List<User> findAllByRole(Long roleId) {
         Role role = roleDao.findOne(roleId);
         return userDao.findAllByRoles(role);
+    }
+
+    @Override
+    public List<User> findAllByClassroom(Classroom classroom) {
+        return userDao.findAllByClassroom(classroom);
     }
 
     @Override

@@ -24,8 +24,8 @@
 </c:if>
 
 <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
-    <a href="/teacher"><button type="button" class="btn btn-primary pull-right">Журнал</button></a>
-    <a href="/new-subject"><button type="button" class="btn btn-primary pull-right">Создание класса</button></a>
+    <a href="/classrooms"><button type="button" class="btn btn-primary pull-right">Журнал</button></a>
+    <a href="/new-subject"><button type="button" class="btn btn-primary pull-right">Создание предмета</button></a>
     <br>
 </c:if>
 

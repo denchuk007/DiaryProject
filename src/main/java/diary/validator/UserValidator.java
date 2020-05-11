@@ -5,11 +5,7 @@ import diary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Component
 public class UserValidator implements Validator {
@@ -26,35 +22,33 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         User user = (User) o;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "Required");
         if (user.getUsername().length() < 1 || user.getUsername().length() > 32) {
-            errors.rejectValue("username", "Size.userForm.username");
+            errors.rejectValue("username", "Incorrect.Login");
         }
 
         if (user.getName().length() < 1 || user.getName().length() > 32) {
-            errors.rejectValue("name", "Некорректный ввод имени");
+            errors.rejectValue("name", "Incorrect.Name");
         }
 
         if (user.getSurname().length() < 1 || user.getSurname().length() > 32) {
-            errors.rejectValue("surname", "Некорректный ввод фамилии");
+            errors.rejectValue("surname", "Incorrect.Surname");
         }
 
-//        Matcher matcher = Pattern.compile("^\\d{4}\\-\\d{2}\\-\\d{2}$").matcher(user.getBirthday());
+//        Matcher matcher = Pattern.compile("^\\d{2}\\.\\d{2}\\.\\d{4}$").matcher(user.getBirthday().toString());
 //        if (!matcher.find()) {
-//            errors.rejectValue("birthday", "Некорректный ввод дня рождения");
+//            errors.rejectValue("birthday", "Incorrect.Birthday");
 //        }
 
         if (userService.findByUsername(user.getUsername()) != null) {
-            errors.rejectValue("username", "Duplicate.userForm.username");
+            errors.rejectValue("username", "Username.Is.Busy");
         }
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
         if (user.getPassword().length() < 1 || user.getPassword().length() > 32) {
-            errors.rejectValue("password", "Size.userForm.password");
+            errors.rejectValue("password", "Incorrect.Password");
         }
 
         if (!user.getConfirmPassword().equals(user.getPassword())) {
-            errors.rejectValue("confirmPassword", "Different.userForm.password");
+            errors.rejectValue("confirmPassword", "Confirm.Password.Failed");
         }
     }
 }

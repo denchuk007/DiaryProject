@@ -1,5 +1,6 @@
 package diary.service;
 
+import diary.model.Classroom;
 import diary.model.Mark;
 import diary.model.Role;
 import diary.model.User;
@@ -16,6 +17,7 @@ public interface UserService {
     List<User> findAllUsers();
     List<Role> findAllRoles();
     List<User> findAllByRole(Long roleId);
+    List<User> findAllByClassroom(Classroom classroom);
     boolean deleteUser(Long userId);
     List<User> findAllCurrentTeacherPupils();
 }

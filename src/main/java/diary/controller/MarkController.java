@@ -1,6 +1,5 @@
 package diary.controller;
 
-import diary.dao.SubjectDao;
 import diary.model.Mark;
 import diary.service.MarkService;
 import diary.service.SecurityService;
@@ -45,11 +44,11 @@ public class MarkController {
                           @PathVariable("id") String pupilId,
                           @RequestParam("subjectId") String subjectId,
                           BindingResult bindingResult, Model model) {
-        mark.setDate(Date.valueOf(LocalDate.now()));
+        //mark.setDate(Date.valueOf(LocalDate.now()));
         mark.setTeacher(securityService.findLoggedInUser());
         mark.setPupil(userService.findById(Long.valueOf(pupilId)));
         mark.setSubject(subjectService.findById(Long.valueOf(subjectId)));
         markService.save(mark);
-        return "redirect:/teacher";
+        return "redirect:/teacher/" + pupilId;
     }
 }

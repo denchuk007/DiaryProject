@@ -12,8 +12,6 @@
 </head>
 <body>
 
-<a href="${contextPath}/"><button class="btn btn-primary pull-right">Поставить оценку</button></a>
-
 <c:if test="${pageContext.request.userPrincipal.name != null}">
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -24,21 +22,19 @@
     </h4>
 </c:if>
 
-<c:if test="${!empty pupils}">
+<c:if test="${!empty classrooms}">
     <table class="table table-bordered">
         <thead>
         <tr>
             <th>ID</th>
-            <th>Имя, Фамилия</th>
-            <th>Поставить оценку</th>
+            <th>Школьные классы</th>
         </tr>
         </thead>
-        <c:forEach items="${pupils}" var="pupil">
+        <c:forEach items="${classrooms}" var="classroom">
             <tbody>
             <tr>
-                <th>${pupil.id}</th>
-                <td>${pupil.name} ${pupil.surname}</td>
-                <td><a href="/new-mark/${pupil.id}"><button class="btn btn-primary">+</button></a></td>
+                <th>${classroom.id}</th>
+                <td><a href="/classroom/${classroom.digit}${classroom.word}">${classroom.digit}${classroom.word}</a></td>
             </tr>
             </tbody>
         </c:forEach>
