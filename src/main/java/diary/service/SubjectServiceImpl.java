@@ -14,6 +14,16 @@ public class SubjectServiceImpl implements SubjectService {
     private SubjectDao subjectDao;
 
     @Override
+    public void delete(Subject subject) {
+        subjectDao.delete(subject);
+    }
+
+    @Override
+    public void delete(Long id) {
+        subjectDao.delete(id);
+    }
+
+    @Override
     public void save(Subject subject) {
         subject.setTitle(subject.getTitle());
         subjectDao.save(subject);
@@ -27,5 +37,10 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Subject findById(Long id) {
         return subjectDao.findOne(id);
+    }
+
+    @Override
+    public Subject findByTitle(String title) {
+        return subjectDao.findByTitle(title);
     }
 }

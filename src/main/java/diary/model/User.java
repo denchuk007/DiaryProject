@@ -50,7 +50,7 @@ public class User {
     private Set<User> pupils;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pupil_id")
+    @JoinColumn(name = "pupil_id", updatable = false)
     private Set<Mark> marks;
 
     public Long getId() {

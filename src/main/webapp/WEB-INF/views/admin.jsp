@@ -12,27 +12,26 @@
 </head>
 
 <body>
-
+<a href="${contextPath}/welcome"><button class="btn btn-primary pull-left"> <= Назад </button></a>
 <a href="${contextPath}/registration"><button class="btn btn-primary pull-right">Создать аккаунт</button></a>
+<br>
 <br>
 
     <c:if test="${pageContext.request.userPrincipal.name != null}">
         <form id="logoutForm" method="post" action="${contextPath}/logout">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
-        <h3 class="text-right">Админ панель ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Выйти</a>
-        </h3>
+        <h4 class="text-right">Вы вошли как ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()" href="#">Выйти</a>
+        </h4>
     </c:if>
 
-<span><c:forEach items="${loggedUser.authorities}" var="authorities"> ${authorities.authority} </c:forEach></span>
-
 <c:if test="${!empty listUsers}">
-    <table class="table table-bordered">
+    <table class="table">
         <thead>
         <tr>
             <th>ID</th>
             <th>Логин</th>
-            <th>Пароль</th>
+
             <th>Роль</th>
             <th>Имя</th>
             <th>Фамилия</th>
@@ -48,11 +47,22 @@
             <tr>
                 <th>${user.id}</th>
                 <td>${user.username}</td>
-                <td>***</td>
+
                 <td>
                     <c:if test="${!empty user.roles}">
                         <c:forEach items="${user.roles}" var="role">
-                            ${role.name}
+                            <c:if test="${role.name == 'ROLE_PUPIL'}">
+                                Ученик
+                            </c:if>
+                            <c:if test="${role.name == 'ROLE_PARENT'}">
+                                Родитель
+                            </c:if>
+                            <c:if test="${role.name == 'ROLE_TEACHER'}">
+                                Учитель
+                            </c:if>
+                            <c:if test="${role.name == 'ROLE_ADMIN'}">
+                                <span style="color: red;">Администратор</span>
+                            </c:if>
                         </c:forEach>
                     </c:if>
                 </td>
@@ -71,7 +81,7 @@
                         <input id="userId" type="hidden" name="userId" value="${user.id}"/>
                         <input id="action" type="hidden" name="action" value="delete"/>
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                        <button type="submit" class="btn btn-primary">Удалить</button>
+                        <button type="submit" class="btn btn-primary" onclick="return confirm('Удалить пользователя ${user.username}?')">Удалить</button>
                     </form>
                 </td>
             </tr>
@@ -84,6 +94,7 @@
         $(".table").css("display", "block !important");
     });
 </script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 </body>

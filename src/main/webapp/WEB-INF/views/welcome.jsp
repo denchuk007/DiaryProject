@@ -12,9 +12,25 @@
 </head>
 <body>
 
+<c:if test="${pageContext.request.userPrincipal.name != null}">
+    <form id="logoutForm" method="POST" action="${contextPath}/logout">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
+
+    <h4 class="text-right">
+        Вы вошли как ${currentUser.username}(${currentUserAuthorities}) | <a onclick="document.forms['logoutForm'].submit()" href="#">Выйти</a>
+    </h4>
+
+</c:if>
+
 <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
     <a href="/admin"><button type="button" class="btn btn-primary pull-right">Админ панель</button></a>
-    <a href="/new-subject"><button type="button" class="btn btn-primary pull-right">Создание класса</button></a>
+    <br>
+    <br>
+    <a href="/new-subject"><button type="button" class="btn btn-primary pull-right">Создание предмета</button></a>
+    <br>
+    <br>
+    <a href="/new-classroom"><button type="button" class="btn btn-primary pull-right">Создание класса</button></a>
     <br>
 </c:if>
 
@@ -33,17 +49,6 @@
     <a href="/parent"><button type="button" class="btn btn-primary pull-right">Ученики</button></a>
     <br>
 </c:if>
-
-    <c:if test="${pageContext.request.userPrincipal.name != null}">
-        <form id="logoutForm" method="POST" action="${contextPath}/logout">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        </form>
-
-        <h4 class="text-right">
-            Вы вошли как ${currentUser.username}(${currentUserAuthorities}) | <a onclick="document.forms['logoutForm'].submit()">Выйти</a>
-        </h4>
-
-    </c:if>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

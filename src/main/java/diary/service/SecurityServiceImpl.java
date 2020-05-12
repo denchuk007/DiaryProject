@@ -1,6 +1,7 @@
 package diary.service;
 
 import diary.dao.UserDao;
+import diary.model.Subject;
 import diary.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

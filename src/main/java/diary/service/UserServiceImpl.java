@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
             set.add(userDao.findOne(pupilId));
             user.setPupils(set);
         }
+
         userDao.save(user);
     }
 

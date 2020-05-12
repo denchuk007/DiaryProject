@@ -21,6 +21,16 @@ public class ClassroomServiceImpl implements ClassroomService {
     }
 
     @Override
+    public void delete(Classroom classroom) {
+        classroomDao.delete(classroom);
+    }
+
+    @Override
+    public void delete(Long id) {
+        classroomDao.delete(id);
+    }
+
+    @Override
     public List<Classroom> findAll() {
         return classroomDao.findAll();
     }
@@ -28,5 +38,10 @@ public class ClassroomServiceImpl implements ClassroomService {
     @Override
     public Classroom findByDigitAndWord(String digit, String word) {
         return classroomDao.findByDigitAndWord(digit, word);
+    }
+
+    @Override
+    public Classroom findById(Long id) {
+        return classroomDao.findById(id);
     }
 }

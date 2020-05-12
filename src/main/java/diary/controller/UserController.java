@@ -1,5 +1,6 @@
 package diary.controller;
 
+import diary.model.Mark;
 import diary.model.User;
 import diary.service.ClassroomService;
 import diary.service.SecurityService;
@@ -38,6 +39,7 @@ public class UserController {
     public String edit(@PathVariable("id") Long id, Model model) {
         User user = userService.findById(id);
         user.setPassword("");
+        user.setMarks(user.getMarks());
         model.addAttribute("userForm", user);
         model.addAttribute("roles", userService.findAllRoles());
         model.addAttribute("classrooms", classroomService.findAll());
@@ -74,6 +76,8 @@ public class UserController {
             return "registration";
         }
 
+        userService.save(userForm, roleId, classroomId, pupilId);
+
         return "redirect:/admin";
     }
 
@@ -101,7 +105,6 @@ public class UserController {
             return "registration";
         }
 
-        System.out.println(userForm.getUsername() + "\n" + userForm.getPassword() + "\n" + userForm.getBirthday() + "\n" + userForm.getName());
         userService.save(userForm, roleId, classroomId, pupilId);
 
         return "redirect:/admin";
