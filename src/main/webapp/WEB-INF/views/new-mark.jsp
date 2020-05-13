@@ -20,6 +20,7 @@
 
         <spring:bind path="value">
             <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="hidden" path="id" class="form-control"></form:input>
                 <form:input type="text" path="value" class="form-control" placeholder="Оценка"></form:input>
                 <form:errors path="value"></form:errors>
             </div>

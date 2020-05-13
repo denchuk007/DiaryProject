@@ -15,18 +15,57 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 
+    <style>
+        #menu a:hover, #menu .current_page_item a {
+            text-decoration: none;
+            color: #FFFFFF;
+        }
+
+        #menu .current_page_item a {
+        }
+    </style>
+
 </head>
 <body>
 
+<nav class="navbar navbar-default">
+
+    <div class="container-fluid">
+        <div class="navbar-header">
+
+            <ul class="nav navbar-nav">
+
+                <li><a href="/welcome">Главная</a></li>
+                <li><a href="/parent">Ученики</a></li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Уведомления [${currentUser.notifications.size()}] <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <c:if test="${currentUser.notifications.size() == 0}">
+                            <li><a href="#">Уведомлений нет</a></li>
+                        </c:if>
+                        <c:forEach items="${currentUser.notifications}" var="notification">
+                            <li><a href="/remove/notification/${notification.id}">${notification.text}</a></li>
+                        </c:forEach>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/remove/notifications/${currentUser.id}" onclick="return confirm('Удалить все уведомления?')">Удалить уведомления</a></li>
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <a class="navbar-brand navbar-right" href="#" onclick="document.forms['logoutForm'].submit()">Вы вошли как ${currentUser.username} | Выход</a>
+        </div>
+    </div>
+</nav>
+
 <div class="container-fluid">
 <c:if test="${pageContext.request.userPrincipal.name != null}">
+
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
-
-    <h4 class="text-right">
-        Вы вошли как ${currentUser.username}(${currentUserAuthorities}) | <a onclick="document.forms['logoutForm'].submit()">Выйти</a>
-    </h4>
 
     <table class="table table-blue">
 

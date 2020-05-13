@@ -40,7 +40,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "classroom_id"))
     private Classroom classroom;
 
-    @ManyToMany(mappedBy = "pupils")
+    @ManyToMany(mappedBy = "pupils", fetch = FetchType.EAGER)
     private Set<User> parents;
 
     @OrderBy("id")
@@ -49,9 +49,14 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "pupil_id"))
     private Set<User> pupils;
 
+    @OrderBy("date")
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "pupil_id", updatable = false)
     private Set<Mark> marks;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id", updatable = false)
+    private Set<Notification> notifications;
 
     public Long getId() {
         return id;
@@ -101,6 +106,10 @@ public class User {
         return marks;
     }
 
+    public Set<Notification> getNotifications() {
+        return notifications;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -147,5 +156,9 @@ public class User {
 
     public void setMarks(Set<Mark> marks) {
         this.marks = marks;
+    }
+
+    public void setNotifications(Set<Notification> notifications) {
+        this.notifications = notifications;
     }
 }

@@ -8,6 +8,8 @@ import java.util.Set;
 public interface MarkService {
 
     void save(Mark mark);
+    void delete(Mark mark);
+    void delete(Long id);
     List<Mark> findAll();
-    List<Mark> findAllById(Long id);
+    Mark findById(Long id);
 }

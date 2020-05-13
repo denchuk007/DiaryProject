@@ -80,7 +80,13 @@
                         <c:forEach begin="1" end="${lengthOfMonth}" step="1" var="j">
                             <td>
                                 <p title="Оценка поставлена учителем: ${marksTable[i][j].teacher.name} ${marksTable[i][j].teacher.surname}">
+                                    <c:if test="${currentUserAuthorities != 'ROLE_TEACHER'}">
                                     ${marksTable[i][j].value}
+                                    </c:if>
+
+                                    <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
+                                        <a href="/edit/mark/${marksTable[i][j].pupil.id}/${marksTable[i][j].id} ">${marksTable[i][j].value}</a>
+                                    </c:if>
                                 </p>
                             </td>
                         </c:forEach>

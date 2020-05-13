@@ -25,12 +25,22 @@ public class MarkServiceImpl implements MarkService {
     }
 
     @Override
+    public void delete(Mark mark) {
+        markDao.delete(mark);
+    }
+
+    @Override
+    public void delete(Long id) {
+        markDao.delete(id);
+    }
+
+    @Override
     public List<Mark> findAll() {
         return markDao.findAll();
     }
 
     @Override
-    public List<Mark> findAllById(Long id) {
-        return markDao.findAllById(id);
+    public Mark findById(Long id) {
+        return markDao.findById(id);
     }
 }

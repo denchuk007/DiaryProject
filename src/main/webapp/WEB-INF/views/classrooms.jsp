@@ -23,7 +23,7 @@
 </c:if>
 
 <c:if test="${!empty classrooms}">
-    <table class="table_price">
+    <table class="table table-blue">
         <thead>
             <th>ID</th>
             <th>Школьные классы</th>

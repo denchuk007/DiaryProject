@@ -8,5 +8,5 @@ import java.util.Set;
 
 public interface MarkDao extends JpaRepository<Mark, Long> {
 
-    List<Mark> findAllById(Long id);
+    Mark findById(Long id);
 }
