@@ -34,9 +34,11 @@ public class TeacherController {
     @RequestMapping(value = "/teacher/{pupilId}", method = RequestMethod.GET)
     public String teacher(@PathVariable("pupilId") Long pupilId,
                           Model model) {
+
         model.addAttribute("currentUser", securityService.findLoggedInUser());
         model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
         model.addAttribute("pupilId", pupilId);
+        model.addAttribute("pupil", userService.findById(pupilId));
 
         return "pupil";
     }
@@ -64,6 +66,7 @@ public class TeacherController {
         model.addAttribute("selectedYear", year);
         model.addAttribute("lengthOfMonth", lengthOfMonth);
         model.addAttribute("pupilId", pupilId);
+        model.addAttribute("pupil", userService.findById(pupilId));
 
         return "pupil";
     }

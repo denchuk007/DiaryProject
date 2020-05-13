@@ -7,11 +7,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Журнал</title>
+    <title>Школьные классы</title>
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-
+<div class="container-fluid">
 <c:if test="${pageContext.request.userPrincipal.name != null}">
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -23,12 +23,10 @@
 </c:if>
 
 <c:if test="${!empty classrooms}">
-    <table class="table table-bordered">
+    <table class="table_price">
         <thead>
-        <tr>
             <th>ID</th>
             <th>Школьные классы</th>
-        </tr>
         </thead>
         <c:forEach items="${classrooms}" var="classroom">
             <tbody>
@@ -40,6 +38,8 @@
         </c:forEach>
     </table>
 </c:if>
+</div>
+
 <script>
     $(document).ready(function(){
         $(".table").css("display", "block !important");

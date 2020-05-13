@@ -61,6 +61,8 @@ public class ParentController {
                          Model model) {
 
         User currentUser = securityService.findLoggedInUser();
+        User[] pupils = DiaryUtil.getPupils(currentUser);
+
         Map<String, List<Mark>> table = new HashMap<>();
         int lengthOfMonth = LocalDate.of(year, month, 1).lengthOfMonth();
         String[] subjectsTitle = DiaryUtil.getPupilMarks(currentUser, null, month, year, table, lengthOfMonth, pupilNumber, 0L).first;
@@ -76,6 +78,7 @@ public class ParentController {
         model.addAttribute("selectedYear", year);
         model.addAttribute("lengthOfMonth", lengthOfMonth);
         model.addAttribute("pupilNumber", pupilNumber);
+        model.addAttribute("pupil", pupils[pupilNumber - 1]);
 
         return "pupil";
     }

@@ -11,6 +11,7 @@
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<div class="container-fluid">
 
 <c:if test="${pageContext.request.userPrincipal.name != null}">
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
@@ -48,6 +49,8 @@
             </c:forEach>
         </c:forEach>
     </table>
+
+</div>
 <script>
     $(document).ready(function(){
         $(".table").css("display", "block !important");

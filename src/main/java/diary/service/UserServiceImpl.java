@@ -38,23 +38,25 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private EntityManager entityManager;
-
     @Override
-    public void save(User user, Long roleId, Long classroomId, Long pupilId) {
+    public void save(User user, Long roleId, Long classroomId, String pupilsId) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Set<Role> roles = new HashSet<>();
         roles.add(roleDao.getOne(roleId));
         user.setRoles(roles);
-        if (classroomId != 0 && pupilId == 0) {
+
+        if (classroomId != 0 && pupilsId.equals("0")) {
             user.setClassroom(classroomDao.findOne(classroomId));
         }
 
-        if (pupilId != 0) {
-            Set<User> set = new HashSet<>();
-            set.add(userDao.findOne(pupilId));
-            user.setPupils(set);
+        if (!pupilsId.equals("0")) {
+            Set<User> pupils = new HashSet<>();
+            String[] pupilsIdArray = pupilsId.split(",");
+            for (String id : pupilsIdArray) {
+                Long pupilId = Long.valueOf(id);
+                pupils.add(userDao.findById(pupilId));
+            }
+            user.setPupils(pupils);
         }
 
         userDao.save(user);

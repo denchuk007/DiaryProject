@@ -16,7 +16,9 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 
 </head>
-<body style="background-color: white">
+<body style="background: url(https://w-dog.ru/wallpapers/1/80/451075820004097.jpg) no-repeat; background-size: 100%">
+
+<div class="container-fluid">
 
 <c:if test="${pageContext.request.userPrincipal.name != null}">
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
@@ -29,7 +31,7 @@
 
 <c:if test="${currentUser.roles.iterator().next().name != 'ROLE_PUPIL'}">
     <h4 class="text-left">
-        Оценки ученика
+        Оценки ученика ${pupil.name} ${pupil.surname} (${pupil.classroom.digit}${pupil.classroom.word})
     </h4>
 </c:if>
 
@@ -77,7 +79,7 @@
                         <td>${subjectsTitle[i]}</td>
                         <c:forEach begin="1" end="${lengthOfMonth}" step="1" var="j">
                             <td>
-                                <p title="Оценка поставлена учителем: ${marksTable[i][j].teacher.name}${marksTable[i][j].teacher.surname}}">
+                                <p title="Оценка поставлена учителем: ${marksTable[i][j].teacher.name} ${marksTable[i][j].teacher.surname}">
                                     ${marksTable[i][j].value}
                                 </p>
                             </td>
@@ -87,6 +89,8 @@
                     </c:if>
                     </tbody>
         </table>
+
+</div>
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -107,25 +111,7 @@
             $("#yearSelect").append(option);
         }
 
-        if (location.pathname == "/pupil") {
-            $("#monthSelect").val(date.getMonth() + 1);
-            $("#yearSelect").val(date.getFullYear());
-            $("#okButton").click();
-        } else {
-            $("#monthSelect").val(${selectedMonth});
-            $("#yearSelect").val(${selectedYear});
-        }
-
-        if (location.pathname == "/parent/${pupilNumber}") {
-            $("#monthSelect").val(date.getMonth() + 1);
-            $("#yearSelect").val(date.getFullYear());
-            $("#okButton").click();
-        } else {
-            $("#monthSelect").val(${selectedMonth});
-            $("#yearSelect").val(${selectedYear});
-        }
-
-        if (location.pathname == "/teacher/${pupilId}") {
+        if (location.pathname == "/pupil" || location.pathname == "/parent/${pupilNumber}" || location.pathname == "/teacher/${pupilId}") {
             $("#monthSelect").val(date.getMonth() + 1);
             $("#yearSelect").val(date.getFullYear());
             $("#okButton").click();

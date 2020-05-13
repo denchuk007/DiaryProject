@@ -1,7 +1,6 @@
 package diary.validator;
 
 import diary.model.Classroom;
-import diary.model.User;
 import diary.service.ClassroomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

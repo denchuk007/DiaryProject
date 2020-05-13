@@ -22,8 +22,6 @@
 
 <body>
 
-<a href="/create-classroom"><button class="btn btn-primary pull-right">Создать школьный класс</button></a>
-
 <div class="container">
 
     <form:form method="POST" modelAttribute="userForm" class="form-signin" name="form1">
@@ -80,9 +78,8 @@
             </div>
         </spring:bind>
 
-        <select id="roles" class="selectpicker" onchange="document.getElementById('roleId').value= this.value; ">
+        <select id="roles" class="selectpicker" title="Выберите роль">
             <c:if test="${roles != null}">
-                <option selected>Выберите роль</option>
                 <c:forEach items="${roles}" var="role">
                     <option value="${role.id}">
                         <c:if test="${role.name == 'ROLE_PUPIL'}">
@@ -102,32 +99,30 @@
             </c:if>
         </select>
 
-        <select id="classrooms" onchange="document.getElementById('classroomId').value= this.value;">
+        <select id="classrooms" multiple title="Выберите школьный класс">
             <br>
             <br>
             <c:if test="${classrooms != null}">
-                <option selected>Выберите школьный класс</option>
                 <c:forEach items="${classrooms}" var="classroom">
                     <option value="${classroom.id}">${classroom.digit}${classroom.word}</option>
                 </c:forEach>
             </c:if>
         </select>
 
-        <select id="pupils" onchange="document.getElementById('pupilId').value= this.value;">
+        <select id="pupils" multiple title="Выберите ученика">
             <br>
             <br>
             <br>
             <c:if test="${pupils != null}">
-                <option selected>Выберите ученика</option>
                 <c:forEach items="${pupils}" var="pupil">
-                    <option value="${pupil.id}">${pupil.username}</option>
+                    <option value="${pupil.id}">${pupil.name} ${pupil.surname} (${pupil.classroom.digit}${pupil.classroom.word})</option>
                 </c:forEach>
             </c:if>
         </select>
 
         <input id="roleId" type="hidden" name="roleId" value="0"/>
         <input id="classroomId" type="hidden" name="classroomId" value="0"/>
-        <input id="pupilId" type="hidden" name="pupilId" value="0"/>
+        <input id="pupilsId" type="hidden" name="pupilsId" value="0"/>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Принять</button>
 
@@ -141,7 +136,6 @@
 <!-- Selectpicker -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
 
 <script>
     $(document).ready(function(){
@@ -155,22 +149,31 @@
     });
 
     $("#roles").change(function(){
+        $("#roleId").val($("#roles").val());
+
         $("#classrooms").selectpicker('destroy');
         $("#pupils").selectpicker('destroy');
         if ($("#roles").val() == 1 || $("#roles").val() == 3) {
             $('#classrooms').selectpicker({
-                width: "100%",
-                maxOptions: 1
-            });
-        }
-        else if ($("#roles").val() == 2) {
-            $('#pupils').selectpicker({
                 liveSearch: true,
                 width: "100%",
                 maxOptions: 1
             });
+        } else if ($("#roles").val() == 2) {
+            $('#pupils').selectpicker({
+                liveSearch: true,
+                width: "100%"
+            });
         }
     });
+
+    $("#classrooms").change(function () {
+        $("#classroomId").val($("#classrooms").val());
+    })
+
+    $("#pupils").change(function () {
+        $("#pupilsId").val($("#pupils").val());
+    })
 
 </script>
 </body>

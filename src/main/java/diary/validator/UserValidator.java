@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Component
 public class UserValidator implements Validator {
 
@@ -34,10 +37,11 @@ public class UserValidator implements Validator {
             errors.rejectValue("surname", "Incorrect.Surname");
         }
 
-//        Matcher matcher = Pattern.compile("^\\d{2}\\.\\d{2}\\.\\d{4}$").matcher(user.getBirthday().toString());
-//        if (!matcher.find()) {
-//            errors.rejectValue("birthday", "Incorrect.Birthday");
-//        }
+        String str = user.getBirthday().toString();
+        Matcher matcher = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$").matcher(user.getBirthday().toString());
+        if (!matcher.find()) {
+            errors.rejectValue("birthday", "Incorrect.Birthday");
+        }
 
         if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Username.Is.Busy");

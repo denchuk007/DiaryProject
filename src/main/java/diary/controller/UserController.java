@@ -52,7 +52,7 @@ public class UserController {
     public String edit(@ModelAttribute("userForm") User userForm,
                        @RequestParam(required = true, defaultValue = "") Long roleId,
                        @RequestParam(required = true, defaultValue = "") Long classroomId,
-                       @RequestParam(required = true, defaultValue = "") Long pupilId,
+                       @RequestParam(required = true, defaultValue = "") String pupilsId,
                        BindingResult bindingResult, Model model) {
 
 //        if (!bindingResult.hasErrors()) {
@@ -76,7 +76,7 @@ public class UserController {
             return "registration";
         }
 
-        userService.save(userForm, roleId, classroomId, pupilId);
+        userService.save(userForm, roleId, classroomId, pupilsId);
 
         return "redirect:/admin";
     }
@@ -96,8 +96,12 @@ public class UserController {
     public String registration(@ModelAttribute("userForm") User userForm,
                                @RequestParam(required = true, defaultValue = "") Long roleId,
                                @RequestParam(required = true, defaultValue = "") Long classroomId,
-                               @RequestParam(required = true, defaultValue = "") Long pupilId,
+                               @RequestParam(required = true, defaultValue = "") String pupilsId,
                                BindingResult bindingResult, Model model) {
+
+        model.addAttribute("roles", userService.findAllRoles());
+        model.addAttribute("classrooms", classroomService.findAll());
+        model.addAttribute("pupils", userService.findAllByRole(1L));
 
         userValidator.validate(userForm, bindingResult);
 
@@ -105,7 +109,7 @@ public class UserController {
             return "registration";
         }
 
-        userService.save(userForm, roleId, classroomId, pupilId);
+        userService.save(userForm, roleId, classroomId, pupilsId);
 
         return "redirect:/admin";
     }

@@ -17,6 +17,7 @@
 <br>
 <br>
 
+<div class="container-fluid">
     <c:if test="${pageContext.request.userPrincipal.name != null}">
         <form id="logoutForm" method="post" action="${contextPath}/logout">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -89,6 +90,8 @@
         </c:forEach>
     </table>
 </c:if>
+</div>
+
 <script>
     $(document).ready(function(){
         $(".table").css("display", "block !important");
