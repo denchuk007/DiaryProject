@@ -10,33 +10,83 @@
     <title>Дневник ученика</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
 
 </head>
 <body style="background: url(https://w-dog.ru/wallpapers/1/80/451075820004097.jpg) no-repeat; background-size: 100%">
-
-<div class="container-fluid">
 
 <c:if test="${pageContext.request.userPrincipal.name != null}">
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
+</c:if>
 
-    <h4 class="text-right">
-        Вы вошли как ${currentUser.username}(${currentUserAuthorities}) | <a onclick="document.forms['logoutForm'].submit()" href="#">Выйти</a>
-    </h4>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
 
-<c:if test="${currentUser.roles.iterator().next().name != 'ROLE_PUPIL'}">
+                <ul class="nav navbar-nav">
+                    <li><a href="/welcome">Главная</a></li>
+
+                    <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+                        <li><a href="/new-subject">Создать предмет</a></li>
+                        <li><a href="/new-classroom">Создать класс</a></li>
+                        <li><a href="/admin">Пользователи</a></li>
+                    </c:if>
+
+                    <c:if test="${currentUserAuthorities == 'ROLE_PUPIL'}">
+                        <li><a href="/pupil">Дневник</a></li>
+                    </c:if>
+
+                    <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
+                        <li><a href="/new-subject">Создать предмет</a></li>
+                        <li><a href="/new-classroom">Создать класс</a></li>
+                        <li><a href="/classrooms">Журнал</a></li>
+                    </c:if>
+
+                    <c:if test="${currentUserAuthorities == 'ROLE_PARENT'}">
+                        <li><a href="/parent">Ученики</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Уведомления [${currentUser.notifications.size()}] <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <c:if test="${currentUser.notifications.size() == 0}">
+                                    <li><a href="#">Уведомлений нет</a></li>
+                                </c:if>
+                                <c:forEach items="${currentUser.notifications}" var="notification">
+                                    <li><a href="/remove/notification/${notification.id}">${notification.text}</a></li>
+                                </c:forEach>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/remove/notifications/${currentUser.id}" onclick="return confirm('Удалить все уведомления?')">Удалить уведомления</a></li>
+                            </ul>
+                        </li>
+                    </c:if>
+                </ul>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-main">
+                <a class="navbar-brand navbar-right" href="#" onclick="document.forms['logoutForm'].submit()">Вы вошли как ${currentUser.username} | Выход</a>
+            </div>
+        </div>
+    </nav>
+
+<c:if test="${currentUser.roles.iterator().next().name == 'ROLE_PARENT'}">
     <h4 class="text-left">
         Оценки ученика ${pupil.name} ${pupil.surname} (${pupil.classroom.digit}${pupil.classroom.word})
     </h4>
 </c:if>
 
+<c:if test="${currentUser.roles.iterator().next().name == 'ROLE_TEACHER'}">
+    <h4 class="text-left">
+            Оценки ученика ${pupil.name} ${pupil.surname}
+        <a href="/classroom/${pupil.classroom.digit}${pupil.classroom.word}">
+            (${pupil.classroom.digit}${pupil.classroom.word})
+        </a>
+    </h4>
 </c:if>
 
+<div class="container-fluid">
     <select class="text-left selectpicker" id="monthSelect">
         <option selected>Выберите месяц</option>
         <option value="1">Январь</option>
@@ -85,7 +135,7 @@
                                     </c:if>
 
                                     <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
-                                        <a href="/edit/mark/${marksTable[i][j].pupil.id}/${marksTable[i][j].id} ">${marksTable[i][j].value}</a>
+                                        <a id="mark" onclick="dialogOpen(${marksTable[i][j].pupil.id}, ${marksTable[i][j].id})" href="#">${marksTable[i][j].value}</a>
                                     </c:if>
                                 </p>
                             </td>
@@ -97,9 +147,13 @@
         </table>
 
 </div>
+
+<div id="dialog" title="Диалоговое окно">
+    Выберите действие
+</div>
+
 </body>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 
 <!-- Selectpicker -->
@@ -108,6 +162,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
 
 <script>
+
+    let pupilId;
+    let markId;
 
     $(document).ready(function() {
         let date = new Date();
@@ -138,6 +195,40 @@
             }
         }
     });
+
+    $('#dialog').dialog({
+        title: '',
+        autoOpen: false,
+        resizable: false,
+        buttons: [
+            {
+                text: "Изменить", click: function() {
+                    location.href = "/edit/mark/" + getPupilId() + "/" + getMarkId();
+                }},
+            {
+                text: "Удалить", click: function() {
+                    location.href = "/remove/mark/" + getPupilId() + "/" + getMarkId();
+                }},
+            {
+                text: "Отмена", click: function() {
+                    $(this).dialog("close")
+                }}
+            ]
+    });
+
+    function dialogOpen(pupilId, markId) {
+        this.pupilId = pupilId;
+        this.markId = markId;
+        $('#dialog').dialog("open");
+    }
+
+    function getPupilId() {
+        return this.pupilId;
+    }
+
+    function getMarkId() {
+        return this.markId;
+    }
 
 </script>
 

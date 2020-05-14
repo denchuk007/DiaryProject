@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserService {
 
-    void save(User user, Long roleId, Long classroomId, String pupilsId);
+    void save(User user);
     void update(User user);
     User findByUsername(String username);
     User findById(Long id);

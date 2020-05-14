@@ -54,6 +54,7 @@ public class User {
     @JoinColumn(name = "pupil_id", updatable = false)
     private Set<Mark> marks;
 
+    @OrderBy("id")
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_id", updatable = false)
     private Set<Notification> notifications;

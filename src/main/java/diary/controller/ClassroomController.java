@@ -3,6 +3,7 @@ package diary.controller;
 import diary.model.Classroom;
 import diary.model.Subject;
 import diary.service.ClassroomService;
+import diary.service.SecurityService;
 import diary.validator.ClassroomValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,10 +25,15 @@ public class ClassroomController {
     @Autowired
     private ClassroomValidator classroomValidator;
 
+    @Autowired
+    private SecurityService securityService;
+
     @RequestMapping(value = "/new-classroom", method = RequestMethod.GET)
     public String createClass(Model model) {
         model.addAttribute("classroomForm", new Classroom());
         model.addAttribute("classrooms", classroomService.findAll());
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
 
         return "new-classroom";
     }
@@ -36,6 +42,8 @@ public class ClassroomController {
     public String createClass(@ModelAttribute("classroomForm") Classroom classroom, BindingResult bindingResult, Model model) {
 
         model.addAttribute("classrooms", classroomService.findAll());
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
 
         classroomValidator.validate(classroom, bindingResult);
 
@@ -54,6 +62,8 @@ public class ClassroomController {
         Classroom currentClassroom = classroomService.findById(classroomId);
         model.addAttribute("classroomForm", currentClassroom);
         model.addAttribute("classrooms", classroomService.findAll());
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
 
         return "new-classroom";
     }
@@ -64,6 +74,8 @@ public class ClassroomController {
                               BindingResult bindingResult, Model model) {
 
         model.addAttribute("classrooms", classroomService.findAll());
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
 
         classroomValidator.validate(classroom, bindingResult);
 

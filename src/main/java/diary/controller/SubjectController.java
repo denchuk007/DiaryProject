@@ -1,6 +1,7 @@
 package diary.controller;
 
 import diary.model.Subject;
+import diary.service.SecurityService;
 import diary.service.SubjectService;
 import diary.validator.SubjectValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,15 @@ public class SubjectController {
     @Autowired
     private SubjectValidator subjectValidator;
 
+    @Autowired
+    private SecurityService securityService;
+
     @RequestMapping(value = "/new-subject", method = RequestMethod.GET)
     public String createSubject(Model model) {
         model.addAttribute("subjectForm", new Subject());
         model.addAttribute("subjects", subjectService.findAll());
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
 
         return "new-subject";
     }
@@ -33,6 +39,8 @@ public class SubjectController {
     public String createSubject(@ModelAttribute("subjectForm") Subject subject, BindingResult bindingResult, Model model) {
 
         model.addAttribute("subjects", subjectService.findAll());
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
 
         subjectValidator.validate(subject, bindingResult);
 
@@ -51,6 +59,8 @@ public class SubjectController {
         Subject currentSubject = subjectService.findById(subjectId);
         model.addAttribute("subjectForm", currentSubject);
         model.addAttribute("subjects", subjectService.findAll());
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
 
         return "new-subject";
     }
@@ -61,6 +71,8 @@ public class SubjectController {
                               BindingResult bindingResult, Model model) {
 
         model.addAttribute("subjects", subjectService.findAll());
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
 
         subjectValidator.validate(subject, bindingResult);
 

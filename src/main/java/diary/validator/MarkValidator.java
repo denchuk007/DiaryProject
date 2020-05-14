@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Component
 public class MarkValidator implements Validator {
 
@@ -24,8 +27,21 @@ public class MarkValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Mark mark = (Mark) o;
 
-        if (mark.getValue().toString().length() < 1 || mark.getValue().toString().length() > 3) {
+        if (mark.getValue() == null) {
             errors.rejectValue("value", "Incorrect.Value");
+        }
+
+        if (mark.getSubject() == null) {
+            errors.rejectValue("value", "Incorrect.Subject");
+        }
+
+        Matcher matcher = Pattern.compile("\\d{4}-\\d{2}-\\d{2}").matcher(mark.getDate().toString());
+        if (mark.getDate() == null || !matcher.find()) {
+            errors.rejectValue("value", "Incorrect.Date");
+        }
+
+        if (markService.findByValueAndDateAndSubject(mark.getValue(), mark.getDate(), mark.getSubject(), mark.getPupil()) != null) {
+            errors.rejectValue("value", "Mark.Is.Busy");
         }
     }
 }

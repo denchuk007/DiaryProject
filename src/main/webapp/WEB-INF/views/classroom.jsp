@@ -11,19 +11,31 @@
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container-fluid">
 
 <c:if test="${pageContext.request.userPrincipal.name != null}">
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
-
-    <h4 class="text-right">
-        Вы вошли как ${currentUser.username}(${currentUserAuthorities}) | <a onclick="document.forms['logoutForm'].submit()">Выйти</a>
-    </h4>
 </c:if>
 
-    <h4 class="text-left">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <ul class="nav navbar-nav">
+                <li><a href="/welcome">Главная</a></li>
+                <li><a href="/new-subject">Создать предмет</a></li>
+                <li><a href="/new-classroom">Создать класс</a></li>
+                <li><a href="/classrooms">Журнал</a></li>
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <a class="navbar-brand navbar-right" href="#" onclick="document.forms['logoutForm'].submit()">Вы вошли как ${currentUser.username} | Выход</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+<h4 class="text-left">
         ${classroom.digit}${classroom.word} класс
     </h4>
 

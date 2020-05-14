@@ -1,5 +1,7 @@
 package diary.model;
 
+import org.springframework.core.annotation.Order;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,6 +12,7 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Order
     @Column(name = "title")
     private String title;
 

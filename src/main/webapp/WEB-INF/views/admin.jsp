@@ -12,19 +12,37 @@
 </head>
 
 <body>
-<a href="${contextPath}/welcome"><button class="btn btn-primary pull-left"> <= Назад </button></a>
-<a href="${contextPath}/registration"><button class="btn btn-primary pull-right">Создать аккаунт</button></a>
-<br>
+
+<c:if test="${pageContext.request.userPrincipal.name != null}">
+    <form id="logoutForm" method="post" action="${contextPath}/logout">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
+</c:if>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+
+            <ul class="nav navbar-nav">
+
+                <li><a href="/welcome">Главная</a></li>
+                <li><a href="/new-subject">Создать предмет</a></li>
+                <li><a href="/new-classroom">Создать класс</a></li>
+                <li><a href="/admin">Пользователи</a></li>
+                <li><a href="/registration" style="color: red;">Создать аккаунт</a></li>
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <a class="navbar-brand navbar-right" href="#" onclick="document.forms['logoutForm'].submit()">Вы вошли как ${pageContext.request.userPrincipal.name} | Выход</a>
+        </div>
+    </div>
+</nav>
+
 <br>
 
+<h2 class="form-signin-heading text-center">Пользователи</h2>
+
 <div class="container-fluid">
-    <c:if test="${pageContext.request.userPrincipal.name != null}">
-        <form id="logoutForm" method="post" action="${contextPath}/logout">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        </form>
-        <h4 class="text-right">Вы вошли как ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()" href="#">Выйти</a>
-        </h4>
-    </c:if>
 
 <c:if test="${!empty listUsers}">
     <table class="table">
@@ -73,7 +91,7 @@
                 <td>${user.classroom.digit}${user.classroom.word}</td>
                 <td>
                     <c:forEach items="${user.pupils}" var="pupil">
-                        ${pupil.name} ${pupil.surname}
+                        ${pupil.name} ${pupil.surname} (id: ${pupil.id})<br>
                     </c:forEach>
                 </td>
                 <td><a href="/edit/${user.id}"><button class="btn btn-primary">Ред.</button></a></td>

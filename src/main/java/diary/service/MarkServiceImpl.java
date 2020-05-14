@@ -2,9 +2,12 @@ package diary.service;
 
 import diary.dao.MarkDao;
 import diary.model.Mark;
+import diary.model.Subject;
+import diary.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -42,5 +45,10 @@ public class MarkServiceImpl implements MarkService {
     @Override
     public Mark findById(Long id) {
         return markDao.findById(id);
+    }
+
+    @Override
+    public Mark findByValueAndDateAndSubject(Long value, Date date, Subject subject, User pupil) {
+        return markDao.findByValueAndDateAndSubjectAndPupil(value, date, subject, pupil);
     }
 }

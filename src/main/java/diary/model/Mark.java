@@ -16,7 +16,7 @@ public class Mark {
     @Column(name = "date")
     private Date date;
 
-    @Column(name = "mark")
+    @Column(name = "value")
     private Long value;
 
     @OneToOne(targetEntity = Subject.class)

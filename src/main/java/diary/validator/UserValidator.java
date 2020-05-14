@@ -37,7 +37,6 @@ public class UserValidator implements Validator {
             errors.rejectValue("surname", "Incorrect.Surname");
         }
 
-        String str = user.getBirthday().toString();
         Matcher matcher = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$").matcher(user.getBirthday().toString());
         if (!matcher.find()) {
             errors.rejectValue("birthday", "Incorrect.Birthday");

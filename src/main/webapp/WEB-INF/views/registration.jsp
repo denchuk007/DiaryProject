@@ -13,23 +13,51 @@
     <title>Создание аккаунта</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
-
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 
 </head>
 
 <body>
+<c:if test="${pageContext.request.userPrincipal.name != null}">
+    <form id="logoutForm" method="POST" action="${contextPath}/logout">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
+</c:if>
 
-<div class="container">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+
+            <ul class="nav navbar-nav">
+
+                <li><a href="/welcome">Главная</a></li>
+                <li><a href="/new-subject">Создать предмет</a></li>
+                <li><a href="/new-classroom">Создать класс</a></li>
+
+                <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+                    <li><a href="/admin">Пользователи</a></li>
+                </c:if>
+
+                <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
+                    <li><a href="/admin">Классы</a></li>
+                </c:if>
+
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <a class="navbar-brand navbar-right" href="#" onclick="document.forms['logoutForm'].submit()">Вы вошли как ${pageContext.request.userPrincipal.name} | Выход</a>
+        </div>
+    </div>
+</nav>
+
+<br><br>
+<div class="container" style="width: 500px">
 
     <form:form method="POST" modelAttribute="userForm" class="form-signin" name="form1">
         <c:if test="${userForm.name == null}">
-        <h2 class="form-signin-heading">Создание аккаунта</h2>
+        <h2 class="form-signin-heading text-center">Создание аккаунта</h2>
         </c:if>
         <c:if test="${userForm.name != null}">
-            <h2 class="form-signin-heading">Редактирование акканута</h2>
+            <h2 class="form-signin-heading text-center">Редактирование акканута</h2>
         </c:if>
         <spring:bind path="username">
             <div class="form-group ${status.error ? 'has-error' : ''}">

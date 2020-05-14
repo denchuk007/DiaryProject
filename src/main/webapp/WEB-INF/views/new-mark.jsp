@@ -13,10 +13,26 @@
 </head>
 <body>
 
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <ul class="nav navbar-nav">
+                <li><a href="/welcome">Главная</a></li>
+                <li><a href="/new-subject">Создать предмет</a></li>
+                <li><a href="/new-classroom">Создать класс</a></li>
+                <li><a href="/classrooms">Журнал</a></li>
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-main">
+            <a class="navbar-brand navbar-right" href="#" onclick="document.forms['logoutForm'].submit()">Вы вошли как ${currentUser.username} | Выход</a>
+        </div>
+    </div>
+</nav>
+
 <div class="container" style="width: 25%">
 
-    <form:form method="POST" modelAttribute="mark" class="form-signin">
-        <h2 class="form-signin-heading">Оценка для ученика ${pupil.name} ${pupil.surname}</h2>
+    <form:form method="POST" modelAttribute="markForm" class="form-signin">
+        <h2 class="form-signin-heading text-center">Оценка для ученика ${pupil.name} ${pupil.surname}</h2>
 
         <spring:bind path="value">
             <div class="form-group ${status.error ? 'has-error' : ''}">

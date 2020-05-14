@@ -16,39 +16,55 @@
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
-
-    <h4 class="text-right">
-        Вы вошли как ${currentUser.username}(${currentUserAuthorities}) | <a onclick="document.forms['logoutForm'].submit()" href="#">Выйти</a>
-    </h4>
-
 </c:if>
 
-<c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
-    <a href="/admin"><button type="button" class="btn btn-primary pull-right">Админ панель</button></a>
-    <br>
-    <br>
-    <a href="/new-subject"><button type="button" class="btn btn-primary pull-right">Создание предмета</button></a>
-    <br>
-    <br>
-    <a href="/new-classroom"><button type="button" class="btn btn-primary pull-right">Создание класса</button></a>
-    <br>
-</c:if>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
 
-<c:if test="${currentUserAuthorities == 'ROLE_PUPIL'}">
-    <a href="/pupil"><button type="button" class="btn btn-primary pull-right">Дневник</button></a>
-    <br>
-</c:if>
+                <ul class="nav navbar-nav">
+                    <li><a href="/welcome">Главная</a></li>
 
-<c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
-    <a href="/classrooms"><button type="button" class="btn btn-primary pull-right">Журнал</button></a>
-    <a href="/new-subject"><button type="button" class="btn btn-primary pull-right">Создание предмета</button></a>
-    <br>
-</c:if>
+                    <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+                    <li><a href="/new-subject">Создать предмет</a></li>
+                    <li><a href="/new-classroom">Создать класс</a></li>
+                    <li><a href="/admin">Пользователи</a></li>
+                    </c:if>
 
-<c:if test="${currentUserAuthorities == 'ROLE_PARENT'}">
-    <a href="/parent"><button type="button" class="btn btn-primary pull-right">Ученики</button></a>
-    <br>
-</c:if>
+                    <c:if test="${currentUserAuthorities == 'ROLE_PUPIL'}">
+                        <li><a href="/pupil">Дневник</a></li>
+                    </c:if>
+
+                    <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
+                        <li><a href="/new-subject">Создать предмет</a></li>
+                        <li><a href="/new-classroom">Создать класс</a></li>
+                        <li><a href="/classrooms">Журнал</a></li>
+                    </c:if>
+
+                    <c:if test="${currentUserAuthorities == 'ROLE_PARENT'}">
+                        <li><a href="/parent">Ученики</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Уведомления [${currentUser.notifications.size()}] <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <c:if test="${currentUser.notifications.size() == 0}">
+                                    <li><a href="#">Уведомлений нет</a></li>
+                                </c:if>
+                                <c:forEach items="${currentUser.notifications}" var="notification">
+                                    <li><a href="/remove/notification/${notification.id}">${notification.text}</a></li>
+                                </c:forEach>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/remove/notifications/${currentUser.id}" onclick="return confirm('Удалить все уведомления?')">Удалить уведомления</a></li>
+
+                            </ul>
+                        </li>
+                    </c:if>
+                </ul>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-main">
+                <a class="navbar-brand navbar-right" href="#" onclick="document.forms['logoutForm'].submit()">Вы вошли как ${currentUser.username} | Выход</a>
+            </div>
+        </div>
+    </nav>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

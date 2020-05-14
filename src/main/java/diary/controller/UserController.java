@@ -1,17 +1,21 @@
 package diary.controller;
 
-import diary.model.Mark;
+import diary.dao.RoleDao;
+import diary.model.Role;
 import diary.model.User;
 import diary.service.ClassroomService;
 import diary.service.SecurityService;
 import diary.service.UserService;
 import diary.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Controller
@@ -29,6 +33,12 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private RoleDao roleDao;
+
     @RequestMapping(value = "/error", method = RequestMethod.GET)
     public String error(Model model) {
 
@@ -44,6 +54,7 @@ public class UserController {
         model.addAttribute("roles", userService.findAllRoles());
         model.addAttribute("classrooms", classroomService.findAll());
         model.addAttribute("pupils", userService.findAllByRole(1L));
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
 
         return "registration";
     }
@@ -55,28 +66,16 @@ public class UserController {
                        @RequestParam(required = true, defaultValue = "") String pupilsId,
                        BindingResult bindingResult, Model model) {
 
-//        if (!bindingResult.hasErrors()) {
-//            userService.save(userForm, roleId, classroomId, pupilId);
-//            if ((roleId == 1 && classroomId == 0)) {
-//                // userService.setPupilToTheClassroom(classroomId, userForm.getId());
-//            } else if (roleId == 2 && pupilId != 0) {
-//                //userService.setPupilToTheParent(userForm.getId(), pupilId);
-//            } else if (roleId == 3 && classroomId != 0) {
-//                //userService.setTeacherToTheClassroom(classroomId, userForm.getId());
-//            } else if (roleId != 4) {
-//                userService.deleteUser(userForm.getId());
-//                return "redirect:/error";
-//            }
-//        } else {
-//            userService.deleteUser(userForm.getId());
-//            return "redirect:/error";
-//        }
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+
+        getUserForm(userForm, classroomId, roleId, pupilsId);
 
         if (bindingResult.hasErrors()) {
             return "registration";
         }
 
-        userService.save(userForm, roleId, classroomId, pupilsId);
+        userForm.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
+        userService.save(userForm);
 
         return "redirect:/admin";
     }
@@ -87,6 +86,7 @@ public class UserController {
         model.addAttribute("roles", userService.findAllRoles());
         model.addAttribute("classrooms", classroomService.findAll());
         model.addAttribute("pupils", userService.findAllByRole(1L));
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
 
         return "registration";
     }
@@ -102,6 +102,9 @@ public class UserController {
         model.addAttribute("roles", userService.findAllRoles());
         model.addAttribute("classrooms", classroomService.findAll());
         model.addAttribute("pupils", userService.findAllByRole(1L));
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+
+        getUserForm(userForm, classroomId, roleId, pupilsId);
 
         userValidator.validate(userForm, bindingResult);
 
@@ -109,7 +112,8 @@ public class UserController {
             return "registration";
         }
 
-        userService.save(userForm, roleId, classroomId, pupilsId);
+        userForm.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
+        userService.save(userForm);
 
         return "redirect:/admin";
     }
@@ -129,7 +133,7 @@ public class UserController {
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model) {
-        model.addAttribute("currentUser", securityService.findLoggedInUsername());
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
         model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
         return "welcome";
     }
@@ -155,5 +159,27 @@ public class UserController {
         }
 
         return "redirect:/admin";
+    }
+
+    private User getUserForm(User userForm, Long classroomId, Long roleId, String pupilsId) {
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleDao.getOne(roleId));
+        userForm.setRoles(roles);
+
+        if (classroomId != 0 && pupilsId.equals("0")) {
+            userForm.setClassroom(classroomService.findById(classroomId));
+        }
+
+        if (!pupilsId.equals("0")) {
+            Set<User> pupils = new HashSet<>();
+            String[] pupilsIdArray = pupilsId.split(",");
+            for (String id : pupilsIdArray) {
+                Long pupilId = Long.valueOf(id);
+                pupils.add(userService.findById(pupilId));
+            }
+            userForm.setPupils(pupils);
+        }
+
+        return userForm;
     }
 }

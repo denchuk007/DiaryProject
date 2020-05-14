@@ -39,26 +39,7 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public void save(User user, Long roleId, Long classroomId, String pupilsId) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleDao.getOne(roleId));
-        user.setRoles(roles);
-
-        if (classroomId != 0 && pupilsId.equals("0")) {
-            user.setClassroom(classroomDao.findOne(classroomId));
-        }
-
-        if (!pupilsId.equals("0")) {
-            Set<User> pupils = new HashSet<>();
-            String[] pupilsIdArray = pupilsId.split(",");
-            for (String id : pupilsIdArray) {
-                Long pupilId = Long.valueOf(id);
-                pupils.add(userDao.findById(pupilId));
-            }
-            user.setPupils(pupils);
-        }
-
+    public void save(User user) {
         userDao.save(user);
     }
 
