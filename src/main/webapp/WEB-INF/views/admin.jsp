@@ -26,10 +26,15 @@
             <ul class="nav navbar-nav">
 
                 <li><a href="/welcome">Главная</a></li>
-                <li><a href="/new-subject">Создать предмет</a></li>
-                <li><a href="/new-classroom">Создать класс</a></li>
-                <li><a href="/admin">Пользователи</a></li>
-                <li><a href="/registration" style="color: red;">Создать аккаунт</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Администрирование <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/new-subject">Создать предмет</a></li>
+                        <li><a href="/new-classroom">Создать класс</a></li>
+                        <li><a href="/registration">Создать пользователя</a></li>
+                        <li><a href="/admin">Пользователи</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         <div class="collapse navbar-collapse" id="navbar-main">

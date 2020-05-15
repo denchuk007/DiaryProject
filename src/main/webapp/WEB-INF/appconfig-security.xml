@@ -13,7 +13,7 @@
         <intercept-url pattern="/teacher" access="hasRole('ROLE_TEACHER')"/>
         <intercept-url pattern="/pupil" access="hasAnyRole('ROLE_PUPIL', 'ROLE_PARENT')"/>
         <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/registration" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/registration" access="hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')"/>
 
 
         <form-login login-page="/login" default-target-url="/welcome" authentication-failure-url="/login?error"

@@ -16,8 +16,10 @@
     <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
 
 </head>
-<body style="background: url(https://w-dog.ru/wallpapers/1/80/451075820004097.jpg) no-repeat; background-size: 100%">
-
+<!--
+ <body style="background: url(https://w-dog.ru/wallpapers/1/80/451075820004097.jpg) no-repeat; background-size: 100%">
+-->
+<body>
 <c:if test="${pageContext.request.userPrincipal.name != null}">
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -42,8 +44,14 @@
                     </c:if>
 
                     <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
-                        <li><a href="/new-subject">Создать предмет</a></li>
-                        <li><a href="/new-classroom">Создать класс</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Администрирование <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/new-subject">Создать предмет</a></li>
+                                <li><a href="/new-classroom">Создать класс</a></li>
+                                <li><a href="/registration">Создать пользователя</a></li>
+                            </ul>
+                        </li>
                         <li><a href="/classrooms">Журнал</a></li>
                     </c:if>
 
@@ -71,6 +79,8 @@
         </div>
     </nav>
 
+<div class="container-fluid">
+
 <c:if test="${currentUser.roles.iterator().next().name == 'ROLE_PARENT'}">
     <h4 class="text-left">
         Оценки ученика ${pupil.name} ${pupil.surname} (${pupil.classroom.digit}${pupil.classroom.word})
@@ -86,7 +96,7 @@
     </h4>
 </c:if>
 
-<div class="container-fluid">
+
     <select class="text-left selectpicker" id="monthSelect">
         <option selected>Выберите месяц</option>
         <option value="1">Январь</option>

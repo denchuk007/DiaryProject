@@ -23,6 +23,7 @@
     </form>
 </c:if>
 
+
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -30,21 +31,28 @@
             <ul class="nav navbar-nav">
 
                 <li><a href="/welcome">Главная</a></li>
-                <li><a href="/new-subject">Создать предмет</a></li>
-                <li><a href="/new-classroom">Создать класс</a></li>
 
-                <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
-                    <li><a href="/admin">Пользователи</a></li>
-                </c:if>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Администрирование <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/new-subject">Создать предмет</a></li>
+                        <li><a href="/new-classroom">Создать класс</a></li>
+                        <li><a href="/registration">Создать пользователя</a></li>
+
+                        <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+                            <li><a href="/admin">Пользователи</a></li>
+                        </c:if>
+                    </ul>
+                </li>
 
                 <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
-                    <li><a href="/admin">Классы</a></li>
+                    <li><a href="/classrooms">Журнал</a></li>
                 </c:if>
 
             </ul>
         </div>
         <div class="collapse navbar-collapse" id="navbar-main">
-            <a class="navbar-brand navbar-right" href="#" onclick="document.forms['logoutForm'].submit()">Вы вошли как ${pageContext.request.userPrincipal.name} | Выход</a>
+            <a class="navbar-brand navbar-right" href="#" onclick="document.forms['logoutForm'].submit()">Вы вошли как ${currentUser.username} | Выход</a>
         </div>
     </div>
 </nav>
@@ -109,20 +117,42 @@
         <select id="roles" class="selectpicker" title="Выберите роль">
             <c:if test="${roles != null}">
                 <c:forEach items="${roles}" var="role">
-                    <option value="${role.id}">
-                        <c:if test="${role.name == 'ROLE_PUPIL'}">
-                            Ученик
+
+                    <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
+                        <c:if test="${role.name != 'ROLE_ADMIN' && role.name != 'ROLE_TEACHER'}">
+                            <option value="${role.id}">
+                                <c:if test="${role.name == 'ROLE_PUPIL'}">
+                                    Ученик
+                                </c:if>
+                                <c:if test="${role.name == 'ROLE_PARENT'}">
+                                    Родитель
+                                </c:if>
+                                <c:if test="${role.name == 'ROLE_TEACHER'}">
+                                    Учитель
+                                </c:if>
+                                <c:if test="${role.name == 'ROLE_ADMIN'}">
+                                    Администратор
+                                </c:if>
+                            </option>
                         </c:if>
-                        <c:if test="${role.name == 'ROLE_PARENT'}">
-                            Родитель
-                        </c:if>
-                        <c:if test="${role.name == 'ROLE_TEACHER'}">
-                            Учитель
-                        </c:if>
-                        <c:if test="${role.name == 'ROLE_ADMIN'}">
-                            Администратор
-                        </c:if>
-                    </option>
+                    </c:if>
+
+                    <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+                        <option value="${role.id}">
+                            <c:if test="${role.name == 'ROLE_PUPIL'}">
+                                Ученик
+                            </c:if>
+                            <c:if test="${role.name == 'ROLE_PARENT'}">
+                                Родитель
+                            </c:if>
+                            <c:if test="${role.name == 'ROLE_TEACHER'}">
+                                Учитель
+                            </c:if>
+                            <c:if test="${role.name == 'ROLE_ADMIN'}">
+                                Администратор
+                            </c:if>
+                        </option>
+                    </c:if>
                 </c:forEach>
             </c:if>
         </select>

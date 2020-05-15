@@ -26,9 +26,15 @@
                     <li><a href="/welcome">Главная</a></li>
 
                     <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
-                    <li><a href="/new-subject">Создать предмет</a></li>
-                    <li><a href="/new-classroom">Создать класс</a></li>
-                    <li><a href="/admin">Пользователи</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Администрирование <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/new-subject">Создать предмет</a></li>
+                                <li><a href="/new-classroom">Создать класс</a></li>
+                                <li><a href="/registration">Создать пользователя</a></li>
+                                <li><a href="/admin">Пользователи</a></li>
+                            </ul>
+                        </li>
                     </c:if>
 
                     <c:if test="${currentUserAuthorities == 'ROLE_PUPIL'}">
@@ -36,8 +42,14 @@
                     </c:if>
 
                     <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
-                        <li><a href="/new-subject">Создать предмет</a></li>
-                        <li><a href="/new-classroom">Создать класс</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Администрирование <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/new-subject">Создать предмет</a></li>
+                                <li><a href="/new-classroom">Создать класс</a></li>
+                                <li><a href="/registration">Создать пользователя</a></li>
+                            </ul>
+                        </li>
                         <li><a href="/classrooms">Журнал</a></li>
                     </c:if>
 

@@ -23,8 +23,14 @@
         <div class="navbar-header">
             <ul class="nav navbar-nav">
                 <li><a href="/welcome">Главная</a></li>
-                <li><a href="/new-subject">Создать предмет</a></li>
-                <li><a href="/new-classroom">Создать класс</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Администрирование <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/new-subject">Создать предмет</a></li>
+                        <li><a href="/new-classroom">Создать класс</a></li>
+                        <li><a href="/registration">Создать пользователя</a></li>
+                    </ul>
+                </li>
                 <li><a href="/classrooms">Журнал</a></li>
             </ul>
         </div>

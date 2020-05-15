@@ -26,15 +26,22 @@
                 <ul class="nav navbar-nav">
 
                     <li><a href="/welcome">Главная</a></li>
-                    <li><a href="/new-subject">Создать предмет</a></li>
-                    <li><a href="/new-classroom">Создать класс</a></li>
 
-                    <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
-                    <li><a href="/admin">Пользователи</a></li>
-                    </c:if>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Администрирование <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/new-subject">Создать предмет</a></li>
+                            <li><a href="/new-classroom">Создать класс</a></li>
+                            <li><a href="/registration">Создать пользователя</a></li>
+
+                            <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+                                <li><a href="/admin">Пользователи</a></li>
+                            </c:if>
+                        </ul>
+                    </li>
 
                     <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
-                        <li><a href="/classrooms">Журнал</a></li>
+                    <li><a href="/classrooms">Журнал</a></li>
                     </c:if>
 
                 </ul>
