@@ -38,7 +38,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-        kirllicaToUnicode();
+        //kirllicaToUnicode();
+
+        Calendar instance = Calendar.getInstance();
+        instance.setTime(new java.util.Date());
+        instance.add(Calendar.DAY_OF_MONTH, 1);
+        Date newDate = instance.getTime();
+
+        System.out.println(new java.sql.Date(newDate.getTime()));
     }
 }
 

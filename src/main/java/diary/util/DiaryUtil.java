@@ -4,6 +4,8 @@ import diary.controller.Pair;
 import diary.model.Mark;
 import diary.model.User;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -95,5 +97,98 @@ public class DiaryUtil {
         }
 
         return daysOfWeek;
+    }
+
+
+    public static Pair<String[], String[][]> getAnalyze(User currentUser, int year) {
+        Calendar calendar = Calendar.getInstance();
+        Map<String, List<Mark>> table = new HashMap<>();
+
+        //оценки за год по предметам
+        for (Mark mark : currentUser.getMarks()) {
+            calendar.setTime(mark.getDate());
+            int y = calendar.get(Calendar.YEAR);
+            if (y == year) {
+                String subjectTitle = mark.getSubject().getTitle();
+                List<Mark> tableList;
+                if (table.get(subjectTitle) != null) {
+                    tableList = table.get(subjectTitle);
+                } else {
+                    tableList = new ArrayList<>();
+                }
+                tableList.add(mark);
+                table.put(subjectTitle, tableList);
+            }
+        }
+
+        String[] subjectsTitle = new String[table.size()];
+        Iterator<String> iterator = table.keySet().iterator();
+        String[][] resultTable = new String[table.size()][12];
+
+        for (int i = 0; i < table.size(); i++) {
+            subjectsTitle[i] = iterator.next();
+
+            for (int j = 1; j <= 12; j++) {
+                double sum = 0;
+                int marksCounter = 0;
+                if (!table.get(subjectsTitle[i]).isEmpty()) {
+                    for (Mark mark : table.get(subjectsTitle[i])) {
+                        if (mark.getValue() != 0) {
+                            calendar.setTime(mark.getDate());
+                            int m = calendar.get(Calendar.MONTH) + 1;
+
+                            if (m == j) {
+                                sum += mark.getValue();
+                                marksCounter++;
+                            }
+                        }
+                    }
+                }
+
+                if (sum == 0) {
+                    resultTable[i][j - 1] = "-";
+                } else {
+                    BigDecimal bigDecimal = new BigDecimal(sum / marksCounter);
+                    bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_UP);
+                    resultTable[i][j - 1] = String.valueOf(bigDecimal.doubleValue());
+                }
+            }
+        }
+
+        return new Pair(subjectsTitle, resultTable);
+    }
+
+
+    public static List<String> getBirthdays(User currentUser, List<User> allUsers) {
+
+        List<String> birthdayList = new ArrayList<>();
+        for (User user : allUsers) {
+            if (!user.getUsername().equals(currentUser.getUsername()) && !user.getRoles().iterator().next().getName().equals("ROLE_ADMIN") && !user.getRoles().iterator().next().getName().equals("ROLE_PARENT")) {
+                Calendar instance = Calendar.getInstance();
+                instance.setTime(new java.util.Date());
+                instance.add(Calendar.DAY_OF_MONTH, 1);
+                java.util.Date newDate = instance.getTime();
+
+                if (user.getBirthday().toString().equals(new java.sql.Date(newDate.getTime()).toString())) {
+                    if (user.getRoles().iterator().next().getName().equals("ROLE_PUPIL")) {
+                        birthdayList.add("Завтра ученик " + user.getName() + " " + user.getSurname() + "(" + user.getClassroom().getDigit()
+                                + user.getClassroom().getWord() + " класс) празднует день рождения!");
+                    } else if (user.getRoles().iterator().next().getName().equals("ROLE_PUPIL")) {
+                        birthdayList.add("Завтра учитель " + user.getName() + " " + user.getSurname() + "(" + user.getClassroom().getDigit()
+                                + user.getClassroom().getWord()+ " класс) празднует день рождения!");
+                    }
+                } else if (user.getBirthday().toString().equals(new java.sql.Date(new java.util.Date().getTime()).toString())) {
+                    if (user.getRoles().iterator().next().getName().equals("ROLE_PUPIL")) {
+                        birthdayList.add("Сегодня ученик " + user.getName() + " " + user.getSurname() + "(" + user.getClassroom().getDigit()
+                                + user.getClassroom().getWord() + " класс) празднует день рождения!");
+                    } else if (user.getRoles().iterator().next().getName().equals("ROLE_PUPIL")) {
+                        birthdayList.add("Сегодня учитель " + user.getName() + " " + user.getSurname() + "(" + user.getClassroom().getDigit()
+                                + user.getClassroom().getWord() + " класс) празднует день рождения!");
+                    }
+                }
+            }
+        }
+
+        return birthdayList;
     }
 }

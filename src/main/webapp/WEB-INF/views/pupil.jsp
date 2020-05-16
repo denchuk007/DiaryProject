@@ -118,6 +118,7 @@
     </select>
 
     <button class="btn btn-primary" id="okButton">Перейти</button>
+    <button class="btn btn-primary" id="analyzeButton">Анализ</button>
 
     <br>
     <br>
@@ -158,11 +159,22 @@
                             <td>
                                 <p title="Оценка поставлена учителем: ${marksTable[i][j].teacher.name} ${marksTable[i][j].teacher.surname}">
                                     <c:if test="${currentUserAuthorities != 'ROLE_TEACHER'}">
-                                    ${marksTable[i][j].value}
+                                        <c:if test="${marksTable[i][j].value == 0}">
+                                            н
+                                        </c:if>
+
+                                        <c:if test="${marksTable[i][j].value != 0}">
+                                            ${marksTable[i][j].value}
+                                        </c:if>
                                     </c:if>
 
                                     <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
-                                        <a id="mark" onclick="dialogOpen(${marksTable[i][j].pupil.id}, ${marksTable[i][j].id})" href="#">${marksTable[i][j].value}</a>
+                                        <c:if test="${marksTable[i][j].value == 0}">
+                                            <a id="mark" onclick="dialogOpen(${marksTable[i][j].pupil.id}, ${marksTable[i][j].id})" href="#">н</a>
+                                        </c:if>
+                                        <c:if test="${marksTable[i][j].value != 0}">
+                                            <a id="mark" onclick="dialogOpen(${marksTable[i][j].pupil.id}, ${marksTable[i][j].id})" href="#">${marksTable[i][j].value}</a>
+                                        </c:if>
                                     </c:if>
                                 </p>
                             </td>
@@ -219,6 +231,14 @@
                 location.href = "/teacher/" + ${pupilId} + "/" + $("#monthSelect").val() + "/" + $("#yearSelect").val();
             } else {
                 location.href = "/pupil/" + $("#monthSelect").val() + "/" + $("#yearSelect").val();
+            }
+        }
+    });
+
+    $("#analyzeButton").click(function () {
+        if ($("#monthSelect").val() != null) {
+            if (location.pathname.includes("pupil")) {
+                location.href = "/analyze/" + $("#yearSelect").val();
             }
         }
     });

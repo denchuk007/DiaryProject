@@ -6,6 +6,7 @@ import diary.model.User;
 import diary.service.ClassroomService;
 import diary.service.SecurityService;
 import diary.service.UserService;
+import diary.util.DiaryUtil;
 import diary.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,8 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.*;
 
 
 @Controller
@@ -133,8 +135,11 @@ public class UserController {
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model) {
-        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        User currentUser = securityService.findLoggedInUser();
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("birthdays", DiaryUtil.getBirthdays(currentUser, userService.findAllUsers()));
+
         return "welcome";
     }
 

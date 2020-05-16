@@ -43,7 +43,7 @@
         <spring:bind path="value">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="hidden" path="id" class="form-control"></form:input>
-                <form:input type="text" path="value" class="form-control" placeholder="Оценка"></form:input>
+                <form:input type="text" path="value" class="form-control" id="value"  placeholder="Оценка"></form:input>
                 <form:errors path="value"></form:errors>
             </div>
         </spring:bind>
@@ -71,7 +71,7 @@
 
         <input id="subjectId" type="hidden" name="subjectId" value="0"/>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Принять</button>
+        <button class="btn btn-lg btn-primary btn-block" onclick="checkForN()" type="submit">Принять</button>
     </form:form>
 
 </div>
@@ -92,6 +92,13 @@
             maxOptions: 1
         });
     });
+
+    function checkForN() {
+        if ($("#value").val() == "н") {
+            $("#value").val(0);
+        }
+    }
+
 </script>
 </body>
 </html>

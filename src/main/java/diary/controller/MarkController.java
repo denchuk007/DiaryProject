@@ -60,6 +60,7 @@ public class MarkController {
         mark.setPupil(userService.findById(pupilId));
         mark.setSubject(subjectService.findById(subjectId));
 
+
         markValidator.validate(mark, bindingResult);
 
         if (bindingResult.hasErrors()) {

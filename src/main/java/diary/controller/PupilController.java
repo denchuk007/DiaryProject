@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class PupilController {
@@ -29,6 +29,18 @@ public class PupilController {
 
     @Autowired
     private SubjectService subjectService;
+
+    @RequestMapping(value = "/analyze/{year}", method = RequestMethod.GET)
+    public String analyze(@PathVariable("year") int year, Model model) {
+        User currentUser = securityService.findLoggedInUser();
+        model.addAttribute("currentUserMarks", currentUser.getMarks());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("resultTable", DiaryUtil.getAnalyze(currentUser, year).second);
+        model.addAttribute("subjectsTitle", DiaryUtil.getAnalyze(currentUser, year).first);
+        model.addAttribute("subjectsCount", DiaryUtil.getAnalyze(currentUser, year).first.length);
+
+        return "analyze";
+    }
 
     @RequestMapping(value = "/pupil", method = RequestMethod.GET)
     public String pupil(Model model) {

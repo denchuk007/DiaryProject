@@ -9,6 +9,22 @@
     <meta charset="utf-8">
     <title>Добро пожаловать</title>
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .container {
+            position: relative;
+        }
+
+        .text-block {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: black;
+            color: white;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    </style>
 </head>
 <body>
 
@@ -77,6 +93,21 @@
             </div>
         </div>
     </nav>
+<!--
+<div style="margin-left: 15px; width: 15%; background-color: darkgray; border-color: black; border-radius: 10px;">
+    -->
+<div class="container">
+<div class="text-block">
+    <h4>Nature</h4>
+    <p>What a beautiful sunrise</p>
+    <p>kek</p>
+</div>
+</div>
+    <c:forEach items="${birthdays}" var="birthday">
+        <span>${birthday}</span>
+        <br>
+    </c:forEach>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
