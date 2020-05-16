@@ -67,6 +67,7 @@ public class TeacherController {
         model.addAttribute("lengthOfMonth", lengthOfMonth);
         model.addAttribute("pupilId", pupilId);
         model.addAttribute("pupil", userService.findById(pupilId));
+        model.addAttribute("daysOfWeek", DiaryUtil.getDaysOfWeek(year, month, lengthOfMonth));
 
         return "pupil";
     }

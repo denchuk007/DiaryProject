@@ -79,6 +79,7 @@ public class ParentController {
         model.addAttribute("lengthOfMonth", lengthOfMonth);
         model.addAttribute("pupilNumber", pupilNumber);
         model.addAttribute("pupil", pupils[pupilNumber - 1]);
+       model.addAttribute("daysOfWeek", DiaryUtil.getDaysOfWeek(year, month, lengthOfMonth));
 
         return "pupil";
     }

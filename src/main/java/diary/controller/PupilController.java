@@ -2,7 +2,6 @@ package diary.controller;
 
 import diary.model.Mark;
 import diary.model.User;
-import diary.service.ClassroomService;
 import diary.service.SecurityService;
 import diary.service.SubjectService;
 import diary.service.UserService;
@@ -62,6 +61,7 @@ public class PupilController {
         model.addAttribute("selectedMonth", month);
         model.addAttribute("selectedYear", year);
         model.addAttribute("lengthOfMonth", lengthOfMonth);
+        model.addAttribute("daysOfWeek", DiaryUtil.getDaysOfWeek(year, month, lengthOfMonth));
 
         return "pupil";
     }

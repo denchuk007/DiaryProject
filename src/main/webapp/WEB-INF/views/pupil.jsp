@@ -122,15 +122,32 @@
     <br>
     <br>
 
-        <table class="table table-striped table-bordered" id="table">
+        <table class="table table-striped table-bordered text-center" id="table">
                 <thead>
                 <tr>
-                    <th>Предмет</th>
-                    <c:forEach begin="1" end="${lengthOfMonth}" step="1" var="value">
-                        <th>${value}</th>
+                    <th></th>
+                    <c:forEach begin="1" end="${lengthOfMonth}" step="1" var="i">
+                        <th class="text-center">${i}</th>
                     </c:forEach>
 
                 </tr>
+
+                <tr>
+                    <th class="text-center">Предмет</th>
+
+                    <c:forEach begin="0" end="${lengthOfMonth}" step="1" var="i">
+                        <c:if test="${i != lengthOfMonth}">
+                        <c:if test="${daysOfWeek[i] != 'Сб' && daysOfWeek[i] != 'Вс'}">
+                            <td>${daysOfWeek[i]}</td>
+                        </c:if>
+                        <c:if test="${daysOfWeek[i] == 'Сб' || daysOfWeek[i] == 'Вс'}">
+                            <td style="color: red">${daysOfWeek[i]}</td>
+                        </c:if>
+                        </c:if>
+                    </c:forEach>
+
+                </tr>
+
                 </thead>
                     <tbody>
                     <c:if test="${subjectsCount != null && subjectsCount != 0}">

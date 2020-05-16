@@ -4,6 +4,7 @@ import diary.controller.Pair;
 import diary.model.Mark;
 import diary.model.User;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class DiaryUtil {
@@ -75,5 +76,24 @@ public class DiaryUtil {
             pupils[i] = pupilIterator.next();
         }
         return pupils;
+    }
+
+
+    public static String[] getDaysOfWeek(int year, int month, int lengthOfMonth) {
+        String[] daysOfWeek = new String[lengthOfMonth];
+        for (int i = 0; i < lengthOfMonth; i++) {
+            int dayOfWeek = LocalDate.of(year, month, i + 1).getDayOfWeek().getValue();
+            switch (dayOfWeek) {
+                case 1 : daysOfWeek[i] = "Пн"; break;
+                case 2 : daysOfWeek[i] = "Вт"; break;
+                case 3 : daysOfWeek[i] = "Ср"; break;
+                case 4 : daysOfWeek[i] = "Чт"; break;
+                case 5 : daysOfWeek[i] = "Пт"; break;
+                case 6 : daysOfWeek[i] = "Сб"; break;
+                case 7 : daysOfWeek[i] = "Вс"; break;
+            }
+        }
+
+        return daysOfWeek;
     }
 }
