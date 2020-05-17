@@ -1,4 +1,4 @@
-package diary.controller;
+package diary.util;
 
 public class Pair<F, S> {
 

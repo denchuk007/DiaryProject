@@ -1,6 +1,5 @@
 package diary.util;
 
-import diary.controller.Pair;
 import diary.model.Mark;
 import diary.model.User;
 
@@ -171,18 +170,18 @@ public class DiaryUtil {
 
                 if (user.getBirthday().toString().equals(new java.sql.Date(newDate.getTime()).toString())) {
                     if (user.getRoles().iterator().next().getName().equals("ROLE_PUPIL")) {
-                        birthdayList.add("Завтра ученик " + user.getName() + " " + user.getSurname() + "(" + user.getClassroom().getDigit()
+                        birthdayList.add("Завтра ученик " + user.getName() + " " + user.getSurname() + " (" + user.getClassroom().getDigit()
                                 + user.getClassroom().getWord() + " класс) празднует день рождения!");
                     } else if (user.getRoles().iterator().next().getName().equals("ROLE_PUPIL")) {
-                        birthdayList.add("Завтра учитель " + user.getName() + " " + user.getSurname() + "(" + user.getClassroom().getDigit()
+                        birthdayList.add("Завтра учитель " + user.getName() + " " + user.getSurname() + " (" + user.getClassroom().getDigit()
                                 + user.getClassroom().getWord()+ " класс) празднует день рождения!");
                     }
                 } else if (user.getBirthday().toString().equals(new java.sql.Date(new java.util.Date().getTime()).toString())) {
                     if (user.getRoles().iterator().next().getName().equals("ROLE_PUPIL")) {
-                        birthdayList.add("Сегодня ученик " + user.getName() + " " + user.getSurname() + "(" + user.getClassroom().getDigit()
+                        birthdayList.add("Сегодня ученик " + user.getName() + " " + user.getSurname() + " (" + user.getClassroom().getDigit()
                                 + user.getClassroom().getWord() + " класс) празднует день рождения!");
                     } else if (user.getRoles().iterator().next().getName().equals("ROLE_PUPIL")) {
-                        birthdayList.add("Сегодня учитель " + user.getName() + " " + user.getSurname() + "(" + user.getClassroom().getDigit()
+                        birthdayList.add("Сегодня учитель " + user.getName() + " " + user.getSurname() + " (" + user.getClassroom().getDigit()
                                 + user.getClassroom().getWord() + " класс) празднует день рождения!");
                     }
                 }

@@ -6,6 +6,7 @@ import diary.model.User;
 import diary.service.*;
 import diary.validator.MarkValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -134,21 +135,36 @@ public class MarkController {
             LocalDate localDate = LocalDate.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String formattedString = localDate.format(formatter);
+            String markValue, currentMarkValue;
+
+            if (mark.getValue() == 0) {
+                markValue = "н";
+            } else {
+                markValue = mark.getValue().toString();
+            }
+
             if (isDelete) {
                 notification.setText(formattedString + " | " + mark.getPupil().getName() + " " + mark.getPupil().getSurname() +
                         " (" + mark.getPupil().getClassroom().getDigit() + mark.getPupil().getClassroom().getWord() +
-                        " класс) получил удаление оценки " + mark.getValue() + " по предмету " + mark.getSubject().getTitle() + " за " + mark.getDate().toString() + "." +
+                        " класс) получил удаление оценки " + markValue + " по предмету " + mark.getSubject().getTitle() + " за " + mark.getDate().toString() + "." +
                         " Учитель: " + mark.getTeacher().getName() + " " + mark.getTeacher().getSurname() + ".");
             } else if (currentMark == null) {
                 notification.setText(formattedString + " | " + mark.getPupil().getName() + " " + mark.getPupil().getSurname() +
                         " (" + mark.getPupil().getClassroom().getDigit() + mark.getPupil().getClassroom().getWord() +
-                        " класс) получил оценку " + mark.getValue() + " по предмету " + mark.getSubject().getTitle() + " за " + mark.getDate().toString() + "." +
+                        " класс) получил оценку " + markValue + " по предмету " + mark.getSubject().getTitle() + " за " + mark.getDate().toString() + "." +
                         " Учитель: " + mark.getTeacher().getName() + " " + mark.getTeacher().getSurname() + ".");
             } else {
+
+                if (currentMark.getValue() == 0) {
+                    currentMarkValue = "н";
+                } else {
+                    currentMarkValue = currentMark.getValue().toString();
+                }
+
                 notification.setText(formattedString + " | " + mark.getPupil().getName() + " " + mark.getPupil().getSurname() +
                         " (" + mark.getPupil().getClassroom().getDigit() + mark.getPupil().getClassroom().getWord() +
-                        " класс) получил изменение оценки с " + currentMark.getValue() + " (" + currentMark.getSubject().getTitle() + ")"
-                        + " на " + mark.getValue() + " (" + mark.getSubject().getTitle() + ") за " + mark.getDate().toString() + "." +
+                        " класс) получил изменение оценки с " + currentMarkValue + " (" + currentMark.getSubject().getTitle() + ")"
+                        + " на " + markValue + " (" + mark.getSubject().getTitle() + ") за " + mark.getDate().toString() + "." +
                         " Учитель: " + mark.getTeacher().getName() + " " + mark.getTeacher().getSurname() + ".");
             }
             notification.setParent(parent);

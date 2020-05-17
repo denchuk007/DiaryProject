@@ -1,9 +1,11 @@
 package diary.controller;
 
 import diary.dao.RoleDao;
+import diary.model.News;
 import diary.model.Role;
 import diary.model.User;
 import diary.service.ClassroomService;
+import diary.service.NewsService;
 import diary.service.SecurityService;
 import diary.service.UserService;
 import diary.util.DiaryUtil;
@@ -16,12 +18,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Controller
 public class UserController {
+
+    @Autowired
+    private NewsService newsService;
 
     @Autowired
     private UserService userService;
@@ -139,8 +144,55 @@ public class UserController {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
         model.addAttribute("birthdays", DiaryUtil.getBirthdays(currentUser, userService.findAllUsers()));
+        model.addAttribute("news", newsService.findAll());
+        model.addAttribute("newsForm", new News());
 
         return "welcome";
+    }
+
+    @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.POST)
+    public String addPost(@ModelAttribute("newsForm") News newsForm, Model model) {
+        User currentUser = securityService.findLoggedInUser();
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("birthdays", DiaryUtil.getBirthdays(currentUser, userService.findAllUsers()));
+        model.addAttribute("news", newsService.findAll());
+
+        newsForm.setDate(new Date(new java.util.Date().getTime()));
+
+        newsService.save(newsForm);
+
+        return "redirect:/welcome";
+    }
+
+    @RequestMapping(value = "/edit/post/{id}", method = RequestMethod.GET)
+    public String editPost(@PathVariable("id") Long id, Model model) {
+
+        User currentUser = securityService.findLoggedInUser();
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("birthdays", DiaryUtil.getBirthdays(currentUser, userService.findAllUsers()));
+        model.addAttribute("news", newsService.findAll());
+        model.addAttribute("newsForm", newsService.findById(id));
+
+        return "welcome";
+    }
+
+    @RequestMapping(value = "/edit/post/{id}", method = RequestMethod.POST)
+    public String editPost(@ModelAttribute("newsForm") News newsForm,
+                           @PathVariable("id") Long id) {
+
+        newsService.save(newsForm);
+
+        return "redirect:/welcome";
+    }
+
+    @RequestMapping(value = "/remove/post/{id}", method = RequestMethod.GET)
+    public String deletePost(@PathVariable("id") Long id) {
+
+        newsService.delete(id);
+
+        return "redirect:/welcome";
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
