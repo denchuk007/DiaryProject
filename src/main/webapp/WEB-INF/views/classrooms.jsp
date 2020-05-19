@@ -45,6 +45,7 @@
         <thead>
             <th>ID</th>
             <th>Школьные классы</th>
+            <th>Домашнее задание</th>
         </thead>
         <c:forEach items="${classrooms}" var="classroom">
             <tbody>
@@ -57,6 +58,14 @@
                     <c:if test="${currentUser.classroom.id == classroom.id}">
                         (Ваш класс)
                     </c:if>
+                </td>
+                <td>
+                    <a href="/homework/${classroom.id}">
+                        <button class="btn btn-primary">Просмотр</button>
+                    </a>
+                    <a href="/new-homework/${classroom.id}">
+                        <button class="btn btn-primary">+</button>
+                    </a>
                 </td>
             </tr>
             </tbody>

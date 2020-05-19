@@ -1,7 +1,6 @@
 package diary.controller;
 
 import diary.model.Classroom;
-import diary.model.Subject;
 import diary.service.ClassroomService;
 import diary.service.SecurityService;
 import diary.validator.ClassroomValidator;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.nio.charset.Charset;
 
 @Controller
 public class ClassroomController {

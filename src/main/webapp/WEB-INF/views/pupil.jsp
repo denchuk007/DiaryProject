@@ -41,6 +41,7 @@
 
                     <c:if test="${currentUserAuthorities == 'ROLE_PUPIL'}">
                         <li><a href="/pupil">Дневник</a></li>
+                        <li><a href="/homework/${currentUser.classroom.id}">Домашнее задание</a></li>
                     </c:if>
 
                     <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">

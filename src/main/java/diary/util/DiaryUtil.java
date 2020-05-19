@@ -190,4 +190,55 @@ public class DiaryUtil {
 
         return birthdayList;
     }
+
+
+    public static String[][] getTotalAnalyze(String[][] currentUserResultTable, String[] currentUserSubjectsTitle, List<User> allPupils, User currentUser, int year) {
+        List<String[][]> table = new ArrayList<>();
+        List<String[]> subjectsTitle = new ArrayList<>();
+
+        for (User pupil : allPupils) {
+            if (pupil.getClassroom().getDigit().equals(currentUser.getClassroom().getDigit())
+                    && !pupil.getRoles().iterator().next().getName().equals("ROLE_TEACHER")) {
+                subjectsTitle.add(DiaryUtil.getAnalyze(pupil, year).first);
+
+                if (subjectsTitle.get(subjectsTitle.size() - 1).length != currentUserSubjectsTitle.length) {
+                    continue;
+                }
+
+                int errorCounter = 0;
+                for (int i = 0; i < currentUserSubjectsTitle.length; i++) {
+                    if (!currentUserSubjectsTitle[i].equals(subjectsTitle.get(subjectsTitle.size() - 1)[i])) {
+                        errorCounter++;
+                    }
+                }
+
+                if (errorCounter == 0) {
+                    table.add(DiaryUtil.getAnalyze(pupil, year).second);
+                }
+            }
+        }
+
+        String[][] resultTable = new String[currentUserResultTable.length][12];
+
+        for (int i = 0; i < currentUserResultTable.length; i++) {
+            for (int j = 0; j < 12; j++) {
+                double sum = 0;
+                int markCounter = 0;
+                for (int k = 0; k < table.size(); k++) {
+                    if (!table.get(k)[i][j].equals("-")) {
+                        sum += Double.parseDouble(table.get(k)[i][j]);
+                        markCounter++;
+                    }
+                }
+
+                if (sum == 0) {
+                    resultTable[i][j] = "-";
+                } else {
+                    resultTable[i][j] = String.valueOf(sum / markCounter);
+                }
+            }
+        }
+
+        return resultTable;
+    }
 }
