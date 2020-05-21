@@ -4,6 +4,37 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  *//*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 
+table {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 14px;
+    max-width: 70%;
+    width: 70%;
+    text-align: center;
+    border-collapse: collapse;
+    border-top: 7px solid #9baff1;
+    border-bottom: 7px solid #9baff1;
+}
+th {
+    font-size: 13px;
+    font-weight: normal;
+    background: #e8edff;
+    border-right: 1px solid #9baff1;
+    border-left: 1px solid #9baff1;
+    border-bottom: 1px solid #9baff1;
+    border-top: 1px solid #9baff1;
+    color: #039;
+    padding: 8px;
+}
+td {
+    background: #e8edff;
+    border-right: 1px solid #aabcfe;
+    border-left: 1px solid #aabcfe;
+    border-bottom: 1px solid #9baff1;
+    border-top: 1px solid #9baff1;
+    color: #669;
+    padding: 8px;
+}
+
 html, body, div, span, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, font, img, ul, li {
     margin: 0;
@@ -197,74 +228,6 @@ div#container {
     color: red
 }
 
-.table_price {
-    border-collapse: collapse;
-    border-left: 3px solid #F79361;
-    border-right: 3px solid #F79361;
-    border-bottom: 3px solid #F79361;
-    font-family: "Lucida Grande", sans-serif;
-}
-.table_price caption {
-    background: #F79361;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 2px  4px 0 rgba(0,0,0,.3);
-    color: white;
-    font-family: "Roboto Slab",serif;
-    font-style: normal;
-    font-size: 26px;
-    text-align: center;
-    margin: 0;
-}
-.table_price td, .table_price th {
-    padding: 10px;
-}
-.table_price th {
-    text-align: left;
-    font-size: 18px;
-}
-.table_price tr:nth-child(2n) {
-    background: #E5E5E5;
-}
-.table_price td:last-of-type {
-    text-align: center;
-}
-.table_price a {
-    display: inline-block;
-    padding: 5px 10px;
-    background: #F79361;
-    box-shadow: 2px 2px 0 0 #a22800;
-    position: relative;
-}
-.table_price a:hover {
-    box-shadow: none;
-    top: 2px;
-    left: 2px;
-}
-
-.table-blue{
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-    font-size: 14px;
-    border-collapse: collapse;
-    text-align: center;
-}
-th, td:first-child {
-    background: #AFCDE7;
-    color: white;
-    padding: 10px 20px;
-}
-th, td {
-    border-style: solid;
-    border-width: 0 1px 1px 0;
-    border-color: white;
-}
-td {
-    background: #D8E6F3;
-}
-th:first-child, td:first-child {
-    text-align: left;
-}
 
 html {
     font-family: sans-serif;

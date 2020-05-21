@@ -149,7 +149,7 @@
 
                 <ul class="nav navbar-nav">
                     <li><a href="/welcome">Главная</a></li>
-
+                    <li><a href="/schedule">Расписание</a></li>
                     <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Администрирование <span class="caret"></span></a>

@@ -83,7 +83,7 @@
 
     <h4>Анализ оценок за ${year} год</h4>
 
-    <table class="table table-blue text-center">
+    <table class="table table-blue">
         <c:if test="${subjectsCount != 0}">
         <thead class="text-center">
         <tr>
