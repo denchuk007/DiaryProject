@@ -1,6 +1,8 @@
 package diary.util;
 
 import diary.model.Mark;
+import diary.model.Schedule;
+import diary.model.TimeInterval;
 import diary.model.User;
 
 import java.math.BigDecimal;
@@ -240,5 +242,71 @@ public class DiaryUtil {
         }
 
         return resultTable;
+    }
+
+
+    public static void addToTable(String[][] table, List<Schedule> scheduleList, int i, int counter, List<TimeInterval> timeIntervalList) {
+
+        if (scheduleList.get(0).getLesson() == 1 && counter == 1) {
+            table[i][0] = timeIntervalList.get(0).getValue();
+        } else if (scheduleList.get(0).getLesson() == 2 && counter == 2) {
+            table[i][0] = timeIntervalList.get(1).getValue();
+        } else if (scheduleList.get(0).getLesson() == 3 && counter == 3) {
+            table[i][0] = timeIntervalList.get(2).getValue();
+        } else if (scheduleList.get(0).getLesson() == 4 && counter == 4) {
+            table[i][0] = timeIntervalList.get(3).getValue();
+        } else if (scheduleList.get(0).getLesson() == 5 && counter == 5) {
+            table[i][0] = timeIntervalList.get(4).getValue();
+        } else if (scheduleList.get(0).getLesson() == 6 && counter == 6) {
+            table[i][0] = timeIntervalList.get(5).getValue();
+        } else {
+            return;
+        }
+
+        table[i][1] = scheduleList.get(0).getSubject().getTitle();
+        table[i][2] = scheduleList.get(0).getCabinet();
+        table[i][3] = scheduleList.get(0).getId().toString();
+        scheduleList.remove(0);
+    }
+
+
+    public static String[][] getScheduleTable(List<Schedule> firstWeekScheduleList, List<TimeInterval> timeIntervalList) {
+
+        String[][] table = new String[30][4];
+        int counter = 1;
+        for (int i = 0; i < 30; i++) {
+            if (!firstWeekScheduleList.isEmpty()) {
+
+                if (counter > 6) {
+                    counter = 1;
+                }
+
+                if (i < 6) {
+                    if (firstWeekScheduleList.get(0).getDayOfWeek() == 1) {
+                        DiaryUtil.addToTable(table, firstWeekScheduleList, i, counter, timeIntervalList);
+                    }
+                } else if (i < 12) {
+                    if (firstWeekScheduleList.get(0).getDayOfWeek() == 2) {
+                        DiaryUtil.addToTable(table, firstWeekScheduleList, i, counter, timeIntervalList);
+                    }
+                } else if (i < 18) {
+                    if (firstWeekScheduleList.get(0).getDayOfWeek() == 3) {
+                        DiaryUtil.addToTable(table, firstWeekScheduleList, i, counter, timeIntervalList);
+                    }
+                } else if (i < 24) {
+                    if (firstWeekScheduleList.get(0).getDayOfWeek() == 4) {
+                        DiaryUtil.addToTable(table, firstWeekScheduleList, i, counter, timeIntervalList);
+                    }
+                } else {
+                    if (firstWeekScheduleList.get(0).getDayOfWeek() == 5) {
+                        DiaryUtil.addToTable(table, firstWeekScheduleList, i, counter, timeIntervalList);
+                    }
+                }
+            }
+
+            counter++;
+        }
+
+        return table;
     }
 }

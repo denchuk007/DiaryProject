@@ -16,8 +16,8 @@ public class Schedule {
     @Column(name = "day_of_week")
     private int dayOfWeek;
 
-    @Column(name = "time_interval")
-    private String interval;
+    @Column(name = "lesson")
+    private int lesson;
 
     @Column(name = "cabinet")
     private String cabinet;
@@ -40,8 +40,8 @@ public class Schedule {
         return dayOfWeek;
     }
 
-    public String getInterval() {
-        return interval;
+    public int getLesson() {
+        return lesson;
     }
 
     public String getCabinet() {
@@ -68,8 +68,8 @@ public class Schedule {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public void setInterval(String interval) {
-        this.interval = interval;
+    public void setLesson(int lesson) {
+        this.lesson = lesson;
     }
 
     public void setCabinet(String cabinet) {

@@ -82,7 +82,8 @@
 
 <div class="container" style="width: 25%">
 
-    <h2 class="form-signin-heading text-center">    Расписание
+    <h2 class="form-signin-heading text-center">
+        Расписание
     </h2>
 
     <div class="form-signin">
@@ -93,6 +94,9 @@
             </c:forEach>
         </select>
         <button class="btn btn-lg btn-primary btn-block" id="okButton">Принять</button>
+        <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+        <a href="/new-schedule"><button class="btn btn-lg btn-primary btn-block">Заполнить расписание</button></a>
+        </c:if>
     </div>
 </div>
 
@@ -101,13 +105,30 @@
     <table class="table">
         <thead>
         <tr>
-            <td colspan="4"  style="border-top: 1px black">Первая неделя</td>
+            <td></td>
+            <c:if test="${currentUserAuthorities != 'ROLE_ADMIN'}">
+            <td colspan="3"  style="border-top: 1px #000000">Первая неделя</td>
+            <td colspan="3"  style="border-top: 1px #000000">Вторая неделя</td>
+            </c:if>
+            <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+                <td colspan="4"  style="border-top: 1px #000000">Первая неделя</td>
+                <td colspan="4"  style="border-top: 1px #000000">Вторая неделя</td>
+            </c:if>
         </tr>
         <tr>
             <td>День недели</td>
             <td>Время</td>
             <td>Предмет</td>
             <td>Кабинет</td>
+            <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+                <td></td>
+            </c:if>
+            <td>Время</td>
+            <td>Предмет</td>
+            <td>Кабинет</td>
+            <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+                <td></td>
+            </c:if>
         </tr>
         </thead>
         <tbody>
@@ -121,16 +142,31 @@
 
 
                     <c:forEach begin="0" end="2" step="1" var="j">
-                    <td>${table[i][j]}</td>
+                    <td>${firstWeek[i][j]}</td>
                 </c:forEach>
+
+                    <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+                        <td>
+                            <a href="/edit/schedule/${firstWeek[i][3]}"><button class="btn btn-primary">Ред.</button></a>
+                            <a href="/remove/schedule/${firstWeek[i][3]}"><button class="btn btn-primary">Уд.</button></a>
+                        </td>
+                    </c:if>
+
+                    <c:forEach begin="0" end="2" step="1" var="j">
+                        <td>${secondWeek[i][j]}</td>
+                    </c:forEach>
+
+                    <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
+                        <td>
+                            <a href="/edit/schedule/${secondWeek[i][3]}"><button class="btn btn-primary">Ред.</button></a>
+                            <a href="/remove/schedule/${secondWeek[i][3]}"><button class="btn btn-primary">Уд.</button></a>
+                        </td>
+                    </c:if>
                 </tr>
             </c:forEach>
         </tbody>
     </table>
 </div>
-
-<!-- Selectpicker -->
-
 
 <script>
     $(document).ready(function(){

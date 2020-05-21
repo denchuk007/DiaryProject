@@ -37,7 +37,7 @@
             color:#999;
         }
         .title{
-            width:300px;
+            width:700px;
             margin-top:5px;
             font-weight:bold;
             clear:both;
@@ -259,7 +259,7 @@
                         <form:input type="hidden" path="id" class="form-control"></form:input>
                         <form:input type="hidden" path="date" class="form-control"></form:input>
                         <div style="width: 600px">
-                            <form:input type="text" path="title" class="form-control" placeholder="Название"></form:input>
+                            <form:input type="text" path="title" class="form-control" placeholder="Заголовок"></form:input>
                             <br>
                         <form:textarea type="text" path="text" class="form-control" placeholder="Текст"
                                     autofocus="true"></form:textarea>

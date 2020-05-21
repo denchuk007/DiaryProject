@@ -52,11 +52,9 @@
 
         <h2 class="form-signin-heading text-center">Создание расписания</h2>
 
-        <spring:bind path="interval">
+        <spring:bind path="id">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="hidden" path="id" class="form-control"></form:input>
-                <form:input type="text" path="interval" class="form-control" id="value"  placeholder="Интервал времени"></form:input>
-                <form:errors path="interval"></form:errors>
             </div>
         </spring:bind>
 
@@ -79,6 +77,20 @@
         </select>
         <br>
 
+        <select id="lessons" class="select" onchange="document.getElementById('lesson').value= this.value;">
+            <br>
+            <br>
+            <br>
+            <option selected>Выберите урок</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+        </select>
+        <br>
+
         <select id="classrooms" class="select" onchange="document.getElementById('classroomId').value= this.value;">
             <br>
             <br>
@@ -91,7 +103,6 @@
             </c:if>
         </select>
         <br>
-
 
         <select id="weeks" class="select" onchange="document.getElementById('week').value= this.value;">
             <br>
@@ -122,6 +133,7 @@
         <input id="classroomId" type="hidden" name="classroomId" value="0"/>
         <input id="week" type="hidden" name="week" value="0"/>
         <input id="dayOfWeek" type="hidden" name="dayOfWeek" value="0"/>
+        <input id="lesson" type="hidden" name="lesson" value="0"/>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Принять</button>
     </form:form>

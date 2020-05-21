@@ -41,6 +41,6 @@ public class ScheduleServiceImlp implements ScheduleService {
 
     @Override
     public List<Schedule> findAllByClassroomAndWeek(Classroom classroom, int week) {
-        return scheduleDao.findAllByClassroomAndWeekOrderByDayOfWeekAsc(classroom, week);
+        return scheduleDao.findAllByClassroomAndWeekOrderByDayOfWeekAscLessonAsc(classroom, week);
     }
 }

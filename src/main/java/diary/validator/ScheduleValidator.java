@@ -17,7 +17,7 @@ public class ScheduleValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Schedule schedule = (Schedule) o;
 
-        if (schedule.getInterval() == null || schedule.getInterval().length() > 20 || schedule.getInterval().length() < 1) {
+        if (schedule.getLesson() > 5 || schedule.getLesson() < 1) {
             errors.rejectValue("cabinet", "Incorrect.Interval");
         }
 

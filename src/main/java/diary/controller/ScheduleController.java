@@ -1,10 +1,10 @@
 package diary.controller;
 
-import diary.model.Classroom;
-import diary.model.Homework;
+import diary.dao.TimeIntervalDao;
 import diary.model.Schedule;
-import diary.model.Subject;
+import diary.model.TimeInterval;
 import diary.service.*;
+import diary.util.DiaryUtil;
 import diary.validator.ScheduleValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +35,9 @@ public class ScheduleController {
     @Autowired
     private ScheduleValidator scheduleValidator;
 
+    @Autowired
+    private TimeIntervalDao timeIntervalDao;
+
     @RequestMapping(value = "/new-schedule", method = RequestMethod.GET)
     public String createSchedule(Model model) {
         model.addAttribute("scheduleForm", new Schedule());
@@ -52,6 +55,7 @@ public class ScheduleController {
                                  @RequestParam("classroomId") Long classroomId,
                                  @RequestParam("week") int week,
                                  @RequestParam("dayOfWeek") int dayOfWeek,
+                                 @RequestParam("lesson") int lesson,
                                  BindingResult bindingResult, Model model) {
 
         model.addAttribute("currentUser", securityService.findLoggedInUser());
@@ -63,6 +67,7 @@ public class ScheduleController {
         schedule.setDayOfWeek(dayOfWeek);
         schedule.setSubject(subjectService.findById(subjectId));
         schedule.setWeek(week);
+        schedule.setLesson(lesson);
 
         scheduleValidator.validate(schedule, bindingResult);
 
@@ -93,48 +98,71 @@ public class ScheduleController {
 
         model.addAttribute("currentUser", securityService.findLoggedInUser());
         model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("classrooms", classroomService.findAll());
         model.addAttribute("firstWeekSchedule", scheduleService.findAllByClassroomAndWeek(classroomService.findByDigitAndWord(classroomDigit, classroomWord), 1));
         model.addAttribute("secondWeekSchedule", scheduleService.findAllByClassroomAndWeek(classroomService.findByDigitAndWord(classroomDigit, classroomWord), 2));
 
-        List<Schedule> scheduleList = scheduleService.findAllByClassroomAndWeek(classroomService.findByDigitAndWord(classroomDigit, classroomWord), 1);
+        List<Schedule> firstWeekScheduleList = scheduleService.findAllByClassroomAndWeek(classroomService.findByDigitAndWord(classroomDigit, classroomWord), 1);
+        List<Schedule> secondWeekScheduleList = scheduleService.findAllByClassroomAndWeek(classroomService.findByDigitAndWord(classroomDigit, classroomWord), 2);
+        List<TimeInterval> timeIntervalList = timeIntervalDao.findAll();
 
-        String[][] table = new String[30][3];
-
-        for (int i = 0; i < 30; i++) {
-            if (!scheduleList.isEmpty()) {
-                if (i < 6) {
-                    if (scheduleList.get(0).getDayOfWeek() == 1) {
-                        addToTable(table, scheduleList, i);
-                    }
-                } else if (i < 12) {
-                    if (scheduleList.get(0).getDayOfWeek() == 2) {
-                        addToTable(table, scheduleList, i);
-                    }
-                } else if (i < 18) {
-                    if (scheduleList.get(0).getDayOfWeek() == 3) {
-                        addToTable(table, scheduleList, i);
-                    }
-                } else if (i < 24) {
-                    if (scheduleList.get(0).getDayOfWeek() == 4) {
-                        addToTable(table, scheduleList, i);
-                    }
-                } else {
-                    if (scheduleList.get(0).getDayOfWeek() == 5) {
-                        addToTable(table, scheduleList, i);
-                    }
-                }
-            }
-        }
-
-        model.addAttribute("table", table);
+        model.addAttribute("firstWeek", DiaryUtil.getScheduleTable(firstWeekScheduleList, timeIntervalList));
+        model.addAttribute("secondWeek", DiaryUtil.getScheduleTable(secondWeekScheduleList, timeIntervalList));
 
         return "schedule";
     }
 
-    public static void addToTable(String[][] table, List<Schedule> scheduleList, int i) {
-        table[i][0] = scheduleList.get(0).getInterval();
-        table[i][1] = scheduleList.get(0).getSubject().getTitle();
-        table[i][2] = scheduleList.get(0).getCabinet();
-        scheduleList.remove(0);
+    @RequestMapping(value = "/edit/schedule/{scheduleId}", method = RequestMethod.GET)
+    public String editMark(@PathVariable("scheduleId") Long scheduleId,
+                           Model model) {
+
+        Schedule currentSchedule = scheduleService.findById(scheduleId);
+        model.addAttribute("scheduleForm", currentSchedule);
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("classrooms", classroomService.findAll());
+        model.addAttribute("subjects", subjectService.findAll());
+
+        return "new-schedule";
+    }
+
+    @RequestMapping(value = "/edit/schedule/{scheduleId}", method = RequestMethod.POST)
+    public String createSchedule(@ModelAttribute("scheduleForm") Schedule schedule,
+                                 @PathVariable("scheduleId") Long scheduleId,
+                                 @RequestParam("subjectId") Long subjectId,
+                                 @RequestParam("classroomId") Long classroomId,
+                                 @RequestParam("week") int week,
+                                 @RequestParam("dayOfWeek") int dayOfWeek,
+                                 @RequestParam("lesson") int lesson,
+                                 BindingResult bindingResult, Model model) {
+
+        model.addAttribute("currentUser", securityService.findLoggedInUser());
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("classrooms", classroomService.findAll());
+        model.addAttribute("subjects", subjectService.findAll());
+
+        schedule.setClassroom(classroomService.findById(classroomId));
+        schedule.setDayOfWeek(dayOfWeek);
+        schedule.setSubject(subjectService.findById(subjectId));
+        schedule.setWeek(week);
+        schedule.setLesson(lesson);
+
+        scheduleValidator.validate(schedule, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "new-schedule";
+        }
+
+        scheduleService.save(schedule);
+
+        return "redirect:/new-schedule";
+    }
+
+    @RequestMapping(value = "/remove/schedule/{scheduleId}", method = RequestMethod.GET)
+    public String removeSubject(@PathVariable("scheduleId") Long scheduleId) {
+
+        scheduleService.delete(scheduleId);
+
+        return "redirect:/schedule";
     }
 }

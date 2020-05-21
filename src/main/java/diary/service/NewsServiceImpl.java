@@ -35,6 +35,6 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<News> findAll() {
-        return newsDao.findAll();
+        return newsDao.findAllByIdNotOrderByDateDesc(0L);
     }
 }
