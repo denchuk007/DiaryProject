@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class MarkServiceImpl implements MarkService {
@@ -48,7 +47,7 @@ public class MarkServiceImpl implements MarkService {
     }
 
     @Override
-    public Mark findByValueAndDateAndSubject(Long value, Date date, Subject subject, User pupil) {
-        return markDao.findByValueAndDateAndSubjectAndPupil(value, date, subject, pupil);
+    public Mark findByDateAndSubjectAndPupil(Date date, Subject subject, User pupil) {
+        return markDao.findByDateAndSubjectAndPupil(date, subject, pupil);
     }
 }

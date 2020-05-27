@@ -49,7 +49,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "pupil_id"))
     private Set<User> pupils;
 
-    @OrderBy("date")
+    @OrderBy("subject")
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "pupil_id", updatable = false)
     private Set<Mark> marks;

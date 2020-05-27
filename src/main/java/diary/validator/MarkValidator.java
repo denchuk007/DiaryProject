@@ -40,7 +40,7 @@ public class MarkValidator implements Validator {
             errors.rejectValue("value", "Incorrect.Date");
         }
 
-        if (markService.findByValueAndDateAndSubject(mark.getValue(), mark.getDate(), mark.getSubject(), mark.getPupil()) != null) {
+        if (markService.findByDateAndSubjectAndPupil(mark.getDate(), mark.getSubject(), mark.getPupil()) != null) {
             errors.rejectValue("value", "Mark.Is.Busy");
         }
     }

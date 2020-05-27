@@ -90,8 +90,8 @@
     <table class="table table-blue">
         <thead>
         <tr>
-            <th>Предмет</th>
-            <th>Задание</th>
+            <th style="text-align: center">Предмет</th>
+            <th style="text-align: center">Задание</th>
             <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
             <th>Ред.</th>
                 <th>Удалить</th>
@@ -101,7 +101,7 @@
         <tbody>
         <c:forEach items="${currentClassroomHomework}" var="homework">
             <tr>
-            <td>
+            <td style="text-align: left">
                 ${homework.subject.title}
             </td>
             <td>

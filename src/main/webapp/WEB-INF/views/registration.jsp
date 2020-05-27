@@ -62,7 +62,7 @@
 
     <form:form method="POST" modelAttribute="userForm" class="form-signin" name="form1">
         <c:if test="${userForm.name == null}">
-        <h2 class="form-signin-heading text-center">Создание аккаунта</h2>
+        <h2 class="form-signin-heading text-center">Регистрация пользователя</h2>
         </c:if>
         <c:if test="${userForm.name != null}">
             <h2 class="form-signin-heading text-center">Редактирование акканута</h2>

@@ -55,7 +55,7 @@
     <table class="table table-blue">
 
         <thead>
-        <td>ID</td>
+        <td>№</td>
         <td>Имя Фамилия</td>
         <td>Класс</td>
         </thead>
@@ -64,7 +64,7 @@
         <c:if test="${currentUser.pupils.size() > 0}">
             <c:forEach begin="0" end="${currentUser.pupils.size() - 1}" step="1" var="i">
             <tr>
-                <td>${currentUserPupils[i].id}</td>
+                <td>${i + 1}</td>
                 <td><a class="pupils" href="/parent/${i + 1}">${currentUserPupils[i].name} ${currentUserPupils[i].surname}</a></td>
                 <td>${currentUserPupils[i].classroom.digit}${currentUserPupils[i].classroom.word}</td>
             </tr>

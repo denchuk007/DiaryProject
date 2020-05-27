@@ -88,17 +88,27 @@
         <thead class="text-center">
         <tr>
             <th></th>
-            <c:forEach begin="1" end="12" step="1" var="i">
-                <th>${i}</th>
-            </c:forEach>
+
+            <th style="text-align: center">Январь</th>
+            <th style="text-align: center">Февраль</th>
+            <th style="text-align: center">Март</th>
+            <th style="text-align: center">Апрель</th>
+            <th style="text-align: center">Май</th>
+            <th style="text-align: center">Июнь</th>
+            <th style="text-align: center">Июль</th>
+            <th style="text-align: center">Август</th>
+            <th style="text-align: center">Сентябрь</th>
+            <th style="text-align: center">Октябрь</th>
+            <th style="text-align: center">Ноябрь</th>
+            <th style="text-align: center">Декабрь</th>
+
         </tr>
         </thead>
 
         <tbody>
-
         <c:forEach begin="0" end="${subjectsCount - 1}" step="1" var="i">
             <tr>
-                <td>
+                <td style="text-align: left">
                     ${subjectsTitle[i]}
                 </td>
             <c:forEach begin="0" end="11" step="1" var="j">

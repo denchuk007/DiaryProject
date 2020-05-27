@@ -43,14 +43,14 @@
 <c:if test="${!empty classrooms}">
     <table class="table table-blue">
         <thead>
-            <th>ID</th>
+            <th>№</th>
             <th>Школьные классы</th>
             <th>Домашнее задание</th>
         </thead>
         <c:forEach items="${classrooms}" var="classroom">
             <tbody>
             <tr>
-                <th>${classroom.id}</th>
+                <th>${classrooms.indexOf(classroom) + 1}</th>
                 <td>
                     <a href="/classroom/${classroom.digit}${classroom.word}">
                             ${classroom.digit}${classroom.word}

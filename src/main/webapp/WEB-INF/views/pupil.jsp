@@ -32,7 +32,7 @@
 
                 <ul class="nav navbar-nav">
                     <li><a href="/welcome">Главная</a></li>
-
+                    <li><a href="/schedule">Расписание</a></li>
                     <c:if test="${currentUserAuthorities == 'ROLE_ADMIN'}">
                         <li><a href="/new-subject">Создать предмет</a></li>
                         <li><a href="/new-classroom">Создать класс</a></li>
@@ -124,7 +124,7 @@
     <br>
     <br>
 
-        <table class="table table-striped table-bordered text-center" id="table">
+        <table class="table" id="table">
                 <thead>
                 <tr>
                     <th></th>
@@ -155,7 +155,7 @@
                     <c:if test="${subjectsCount != null && subjectsCount != 0}">
                     <c:forEach begin="0" end="${subjectsCount - 1}" step="1" var="i">
                     <tr>
-                        <td>${subjectsTitle[i]}</td>
+                        <td style="text-align: left">${subjectsTitle[i]}</td>
                         <c:forEach begin="1" end="${lengthOfMonth}" step="1" var="j">
                             <td>
                                 <p title="Оценка поставлена учителем: ${marksTable[i][j].teacher.name} ${marksTable[i][j].teacher.surname}">

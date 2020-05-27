@@ -48,22 +48,20 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>ID</th>
+            <th>№</th>
             <th>Имя Фамилия</th>
             <th>Поставить оценку</th>
         </tr>
         </thead>
         <c:forEach items="${pupils}" var="pupil">
             <c:forEach items="${pupil.roles}" var="role">
-            <c:if test="${role.name == 'ROLE_PUPIL'}">
             <tbody>
             <tr>
-                <th>${pupil.id}</th>
+                <th>${pupils.indexOf(pupil) + 1}</th>
                 <td><a href="/teacher/${pupil.id}">${pupil.name} ${pupil.surname}</a></td>
                 <td><a href="/new-mark/${pupil.id}"><button class="btn btn-primary">+</button></a></td>
             </tr>
             </tbody>
-            </c:if>
             </c:forEach>
         </c:forEach>
     </table>

@@ -15,5 +15,5 @@ public interface MarkService {
     void delete(Long id);
     List<Mark> findAll();
     Mark findById(Long id);
-    Mark findByValueAndDateAndSubject(Long value, Date date, Subject subject, User pupil);
+    Mark findByDateAndSubjectAndPupil(Date date, Subject subject, User pupil);
 }
