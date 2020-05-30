@@ -27,7 +27,7 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public void delete(Long id) {
-        homeworkDao.delete(id);
+            homeworkDao.delete(id);
     }
 
     @Override

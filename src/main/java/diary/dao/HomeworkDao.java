@@ -8,6 +8,5 @@ import java.sql.Date;
 import java.util.List;
 
 public interface HomeworkDao extends JpaRepository<Homework, Long> {
-
     List<Homework> findByClassroomAndDate(Classroom classroom, Date date);
 }

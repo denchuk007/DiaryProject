@@ -106,6 +106,9 @@
             </td>
             <td>
                 ${homework.text}
+                <c:if test="${homework.link != null && homework.link.length() != 0}">
+                <a href="${homework.link}" style="color: orangered">(скачать)</a>
+                </c:if>
             </td>
                 <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
                 <td>

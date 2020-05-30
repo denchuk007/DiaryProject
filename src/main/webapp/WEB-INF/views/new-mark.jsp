@@ -48,6 +48,13 @@
             </div>
         </spring:bind>
 
+        <spring:bind path="note">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="note" class="form-control" placeholder="Примечание"></form:input>
+                <form:errors path="note"></form:errors>
+            </div>
+        </spring:bind>
+
         <spring:bind path="date">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="date" path="date" class="form-control" placeholder="Дата"></form:input>

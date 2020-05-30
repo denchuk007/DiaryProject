@@ -158,7 +158,7 @@
                         <td style="text-align: left">${subjectsTitle[i]}</td>
                         <c:forEach begin="1" end="${lengthOfMonth}" step="1" var="j">
                             <td>
-                                <p title="Оценка поставлена учителем: ${marksTable[i][j].teacher.name} ${marksTable[i][j].teacher.surname}">
+                                <p title="Оценка поставлена учителем: ${marksTable[i][j].teacher.name} ${marksTable[i][j].teacher.surname}&#013;Примечание: ${marksTable[i][j].note}">
                                     <c:if test="${currentUserAuthorities != 'ROLE_TEACHER'}">
                                         <c:if test="${marksTable[i][j].value == 0}">
                                             н

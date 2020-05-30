@@ -46,12 +46,6 @@ public class UserController {
     @Autowired
     private RoleDao roleDao;
 
-    @RequestMapping(value = "/error", method = RequestMethod.GET)
-    public String error(Model model) {
-
-        return "error";
-    }
-
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable("id") Long id, Model model) {
         User user = userService.findById(id);
@@ -100,11 +94,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-    public String registration(@ModelAttribute("userForm") User userForm,
-                               @RequestParam(required = true, defaultValue = "") Long roleId,
-                               @RequestParam(required = true, defaultValue = "") Long classroomId,
-                               @RequestParam(required = true, defaultValue = "") String pupilsId,
-                               BindingResult bindingResult, Model model) {
+    public String registration(@ModelAttribute("userForm") User userForm, @RequestParam(required = true, defaultValue = "") Long roleId, @RequestParam(required = true, defaultValue = "") Long classroomId, @RequestParam(required = true, defaultValue = "") String pupilsId, BindingResult bindingResult, Model model) {
 
         model.addAttribute("roles", userService.findAllRoles());
         model.addAttribute("classrooms", classroomService.findAll());
@@ -128,7 +118,7 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
         if (error != null) {
-            model.addAttribute("error", "Логин или пароль некоррекнты.");
+            model.addAttribute("error", "Проверьте введенные данные.");
         }
 
         if (logout != null) {
@@ -216,6 +206,12 @@ public class UserController {
         }
 
         return "redirect:/admin";
+    }
+
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public String error(Model model) {
+
+        return "error";
     }
 
     private User getUserForm(User userForm, Long classroomId, Long roleId, String pupilsId) {

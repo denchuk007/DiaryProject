@@ -1,7 +1,5 @@
 package diary.model;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -18,6 +16,9 @@ public class Mark {
 
     @Column(name = "value")
     private Long value;
+
+    @Column(name = "note")
+    private String note;
 
     @OneToOne(targetEntity = Subject.class)
     private Subject subject;
@@ -38,6 +39,10 @@ public class Mark {
 
     public Long getValue() {
         return value;
+    }
+
+    public String getNote() {
+        return note;
     }
 
     public Subject getSubject() {
@@ -62,6 +67,10 @@ public class Mark {
 
     public void setValue(Long value) {
         this.value = value;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public void setSubject(Subject subject) {

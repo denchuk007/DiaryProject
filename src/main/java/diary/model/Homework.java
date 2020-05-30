@@ -14,6 +14,9 @@ public class Homework {
     @Column(name = "text")
     private String text;
 
+    @Column(name = "link")
+    private String link;
+
     @Column(name = "date")
     private Date date;
 
@@ -29,6 +32,10 @@ public class Homework {
 
     public String getText() {
         return text;
+    }
+
+    public String getLink() {
+        return link;
     }
 
     public Date getDate() {
@@ -49,6 +56,10 @@ public class Homework {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public void setDate(Date date) {
