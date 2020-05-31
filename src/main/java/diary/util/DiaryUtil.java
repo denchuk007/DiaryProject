@@ -309,4 +309,70 @@ public class DiaryUtil {
 
         return table;
     }
+
+    public static Pair<String[], String[]> getTop3SubjectMarks(User currentUser, int year) {
+        String[] subjectsTitle = getAnalyze(currentUser, year).first;
+        String[][] marksTable = getAnalyze(currentUser, year).second;
+        double[] averages = new double[subjectsTitle.length];
+
+        for (int i = 0; i < subjectsTitle.length; i++) {
+            double average = 0;
+            int counter = 0;
+            for (int j = 0; j < 12; j++) {
+                if (!marksTable[i][j].equals("-")) {
+                    average += Double.parseDouble(marksTable[i][j]);
+                    counter++;
+                }
+            }
+            averages[i] = average / counter;
+        }
+
+        sortArray(averages, subjectsTitle);
+
+        String[] resultAverages = new String[3];
+
+        for (int i = 0; i < resultAverages.length; i++) {
+            resultAverages[i] = String.valueOf(averages[i]);
+        }
+
+        return new Pair(subjectsTitle, resultAverages);
+    }
+
+    public static void reverseArray(String[][] a, double[][] b) {
+        for (int j = 0; j < a.length; j++) {
+            for (int i = 0; i < a[j].length; i++) {
+                if (j == 0) {
+                    b[i][j] = i + 1;
+                }
+                if (a[j][i].equals("-")) {
+                    b[i][j + 1] = 0;
+                } else {
+                    b[i][j + 1] = Double.parseDouble(a[j][i]);
+                }
+            }
+        }
+    }
+
+    public static void sortArray(double[] averages, String[] titles) {
+        for (int i = 0; i < averages.length - 1; i++) {
+            for (int j = 0; j < averages.length - i - 1; j++) {
+                if (averages[j] < averages[j + 1]) {
+                    swapDouble(averages, j, j + 1);
+                    swapString(titles, j, j + 1);
+                }
+            }
+        }
+    }
+
+    public static void swapDouble(double[] array, int firstIndex, int secondIndex) {
+        double temp = array[firstIndex];
+        array[firstIndex] = array[secondIndex];
+        array[secondIndex] = temp;
+    }
+
+    public static void swapString(String[] array, int firstIndex, int secondIndex) {
+        String temp = array[firstIndex];
+        array[firstIndex] = array[secondIndex];
+        array[secondIndex] = temp;
+    }
 }

@@ -46,6 +46,20 @@ public class PupilController {
         model.addAttribute("subjectsCount", currentUserResultTable.length);
         model.addAttribute("totalResultTable", DiaryUtil.getTotalAnalyze(currentUserResultTable, currentUserSubjectsTitle, allPupils, currentUser, year));
 
+        String[][] a = DiaryUtil.getAnalyze(currentUser, year).second;
+        double[][] b = new double[a[0].length][a.length + 1];
+        String[][] c = DiaryUtil.getTotalAnalyze(currentUserResultTable, currentUserSubjectsTitle, allPupils, currentUser, year);
+        double[][] d = new double[c[0].length][c.length + 1];
+
+        DiaryUtil.reverseArray(a, b);
+        DiaryUtil.reverseArray(c, d);
+
+        model.addAttribute("arrayToChart", b);
+        model.addAttribute("arrayToChartTotal", d);
+
+        model.addAttribute("top3SubjectsTitle", DiaryUtil.getTop3SubjectMarks(currentUser, year).first);
+        model.addAttribute("top3SubjectsMarks", DiaryUtil.getTop3SubjectMarks(currentUser, year).second);
+
         return "analyze";
     }
 

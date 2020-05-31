@@ -14,11 +14,88 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['line']});
+        google.charts.setOnLoadCallback(drawChart);
 
+        function drawChart() {
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'Номер месяца');
+
+            <c:forEach begin="0" end="${subjectsCount - 1}" step="1" var="i">
+            data.addColumn('number', '${subjectsTitle[i]}');
+            </c:forEach>
+
+            let mas = [];
+            <c:forEach begin="0" end="11" step="1" var="i">
+            <c:if test="${arrayToChart[i][1] != 0}">
+                mas[${i}] = [];
+                    <c:forEach begin="0" end="${subjectsCount}" step="1" var="j">
+                    mas[${i}][${j}] = ${arrayToChart[i][j]};
+                    </c:forEach>
+            </c:if>
+                </c:forEach>
+
+            data.addRows(mas);
+
+            var options = {
+                chart: {
+                    title: 'График прогресса оценок в течение года',
+                    //subtitle: 'in millions of dollars (USD)'
+                },
+                width: 900,
+                height: 500
+            };
+
+            var chart = new google.charts.Line(document.getElementById('linechart_material'));
+
+            chart.draw(data, google.charts.Line.convertOptions(options));
+        }
+    </script>
+
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['line']});
+        google.charts.setOnLoadCallback(drawChart2);
+
+        function drawChart2() {
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'Номер месяца');
+
+            <c:forEach begin="0" end="${subjectsCount - 1}" step="1" var="i">
+            data.addColumn('number', '${subjectsTitle[i]}');
+            </c:forEach>
+
+            let mas = [];
+            <c:forEach begin="0" end="11" step="1" var="i">
+            <c:if test="${arrayToChartTotal[i][1] != 0}">
+            mas[${i}] = [];
+            <c:forEach begin="0" end="${subjectsCount}" step="1" var="j">
+            mas[${i}][${j}] = ${arrayToChartTotal[i][j]};
+            </c:forEach>
+            </c:if>
+            </c:forEach>
+
+            data.addRows(mas);
+
+            var options = {
+                chart: {
+                    title: 'График прогресса оценок в течение года (общий)',
+                    //subtitle: 'in millions of dollars (USD)'
+                },
+                width: 900,
+                height: 500
+            };
+
+            var chart = new google.charts.Line(document.getElementById('linechart_material2'));
+
+            chart.draw(data, google.charts.Line.convertOptions(options));
+        }
+    </script>
 </head>
-<!--
- <body style="background: url(https://w-dog.ru/wallpapers/1/80/451075820004097.jpg) no-repeat; background-size: 100%">
--->
+
 <body>
 <c:if test="${pageContext.request.userPrincipal.name != null}">
     <form id="logoutForm" method="POST" action="${contextPath}/logout">
@@ -81,7 +158,13 @@
 
 <div class="container-fluid">
 
-    <h4>Анализ оценок за ${year} год</h4>
+    <h3>Анализ оценок за ${year} год</h3>
+
+    <h4>Лучшие предметы (по оценкам): </h4>
+    <c:forEach begin="0" end="2" step="1" var="i">
+        ${top3SubjectsTitle[i]}: ${top3SubjectsMarks[i]}
+        <br>
+    </c:forEach>
 
     <table class="table table-blue">
         <c:if test="${subjectsCount != 0}">
@@ -123,6 +206,9 @@
         </c:if>
     </table>
 
+    <div id="linechart_material" style="width: 900px; height: 500px"></div>
+    <div id="linechart_material2" style="width: 900px; height: 500px"></div>
+
 
 </div>
 
@@ -135,6 +221,7 @@
         let option = new Option(i, i);
         $("#yearSelect").append(option);
     }
+
 </script>
 
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
