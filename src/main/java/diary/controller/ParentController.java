@@ -48,6 +48,7 @@ public class ParentController {
         model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
         model.addAttribute("pupilNumber", pupilNumber);
         model.addAttribute("pupil", pupils[pupilNumber - 1]);
+        model.addAttribute("parentsPupilId", pupils[pupilNumber].getId());
 
         return "pupil";
     }

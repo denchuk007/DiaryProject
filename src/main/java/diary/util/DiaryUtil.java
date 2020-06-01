@@ -310,6 +310,48 @@ public class DiaryUtil {
         return table;
     }
 
+    public static String[][] getTotalMarks(User currentUser, java.sql.Date firstDate, java.sql.Date secondDate) {
+        Map<String, List<Mark>> table = new HashMap<>();
+
+        for (Mark mark : currentUser.getMarks()) {
+            if ((mark.getDate().before(secondDate) ||  mark.getDate().equals(secondDate)) && (mark.getDate().after(firstDate) || mark.getDate().equals(firstDate))) {
+                String subjectTitle = mark.getSubject().getTitle();
+                List<Mark> tableList;
+                if (table.get(subjectTitle) != null) {
+                    tableList = table.get(subjectTitle);
+                } else {
+                    tableList = new ArrayList<>();
+                }
+                tableList.add(mark);
+                table.put(subjectTitle, tableList);
+            }
+        }
+
+        String[] subjectsTitle = new String[table.size()];
+        Iterator<String> iterator = table.keySet().iterator();
+        String[][] resultTable = new String[table.size()][2];
+
+        for (int i = 0; i < table.size(); i++) {
+            subjectsTitle[i] = iterator.next();
+
+            double sum = 0;
+            int marksCounter = 0;
+            if (!table.get(subjectsTitle[i]).isEmpty()) {
+                for (Mark mark : table.get(subjectsTitle[i])) {
+                    if (mark.getValue() != 0) {
+                        sum += mark.getValue();
+                        marksCounter++;
+                    }
+                }
+            }
+
+            resultTable[i][0] = subjectsTitle[i];
+            resultTable[i][1] = String.valueOf(Math.round(sum / marksCounter));
+        }
+
+        return resultTable;
+    }
+
     public static Pair<String[], String[]> getTop3SubjectMarks(User currentUser, int year) {
         String[] subjectsTitle = getAnalyze(currentUser, year).first;
         String[][] marksTable = getAnalyze(currentUser, year).second;

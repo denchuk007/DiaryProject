@@ -214,6 +214,34 @@ public class UserController {
         return "error";
     }
 
+    @RequestMapping(value = "/total-mark/{id}", method = RequestMethod.GET)
+    public String totalMark(@PathVariable("id") Long id, Model model) {
+
+        User currentUser = securityService.findLoggedInUser();
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("pupilId", id);
+
+        return "total-mark";
+    }
+
+    @RequestMapping(value = "/total-mark/{id}/{firstDate}/{secondDate}", method = RequestMethod.GET)
+    public String totalMark(@PathVariable("id") Long id, @PathVariable("firstDate") Date firstDate,
+                             @PathVariable("secondDate") Date secondDate, Model model) {
+
+        User currentUser = securityService.findLoggedInUser();
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserAuthorities", securityService.findLoggedInUsername().getAuthorities().iterator().next());
+        model.addAttribute("pupilId", id);
+        String[][] totalMarks = DiaryUtil.getTotalMarks(userService.findById(id), firstDate, secondDate);
+        model.addAttribute("totalMarks", totalMarks);
+        model.addAttribute("iLength", totalMarks.length);
+        model.addAttribute("jLength", totalMarks[0].length);
+
+        return "total-mark";
+    }
+
+
     private User getUserForm(User userForm, Long classroomId, Long roleId, String pupilsId) {
         Set<Role> roles = new HashSet<>();
         roles.add(roleDao.getOne(roleId));
