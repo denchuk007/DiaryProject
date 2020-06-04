@@ -36,6 +36,11 @@ public class ClassroomServiceImpl implements ClassroomService {
     }
 
     @Override
+    public List<Classroom> findAllByDigit(String digit) {
+        return classroomDao.findAllByDigit(digit);
+    }
+
+    @Override
     public Classroom findByDigitAndWord(String digit, String word) {
         return classroomDao.findByDigitAndWord(digit, word);
     }

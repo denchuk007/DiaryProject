@@ -121,13 +121,13 @@
     <button class="btn btn-primary" id="okButton">Перейти</button>
     <button class="btn btn-primary" id="analyzeButton">Анализ</button>
     <c:if test="${currentUserAuthorities == 'ROLE_PUPIL'}">
-    <a href="/total-mark/${currentUser.id}"><button class="btn btn-primary" id="totalMarkButton">Средний балл</button></a>
+    <a href="/total-mark/${currentUser.id}"><button class="btn btn-primary">Средний балл</button></a>
     </c:if>
-    <c:if test="${currentUserAuthorities == 'ROLE_TACHER'}">
-        <a href="/total-mark/${pupilId}"><button class="btn btn-primary" id="totalMarkButton">Средний балл</button></a>
+    <c:if test="${currentUserAuthorities == 'ROLE_TEACHER'}">
+        <a href="/total-mark/${pupilId}"><button class="btn btn-primary">Средний балл</button></a>
     </c:if>
     <c:if test="${currentUserAuthorities == 'ROLE_PARENT'}">
-        <a href="/total-mark/${parentsPupilId}"><button class="btn btn-primary" id="totalMarkButton">Средний балл</button></a>
+        <a href="/total-mark/${parentsPupilId}"><button class="btn btn-primary">Средний балл</button></a>
     </c:if>
     <br>
     <br>

@@ -94,6 +94,34 @@
             chart.draw(data, google.charts.Line.convertOptions(options));
         }
     </script>
+
+    <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+
+            let mas = [];
+            mas[0] = ['M', 'M'];
+            <c:forEach begin="0" end="9" step="1" var="i">
+            mas[${i + 1}] = [];
+            mas[${i + 1}][0] = '${arrayToPieChart[i][0]}';
+            mas[${i + 1}][1] = ${arrayToPieChart[i][1]};
+            </c:forEach>
+
+            var data = google.visualization.arrayToDataTable(mas);
+
+            var options = {
+                legend: 'none',
+                pieSliceText: 'label',
+                title: 'График среднего балла среди параллельных классов',
+                pieStartAngle: 100,
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        }
+    </script>
+
 </head>
 
 <body>
@@ -208,7 +236,7 @@
 
     <div id="linechart_material" style="width: 900px; height: 500px"></div>
     <div id="linechart_material2" style="width: 900px; height: 500px"></div>
-
+    <div id="piechart" style="width: 900px; height: 500px;"></div>
 
 </div>
 

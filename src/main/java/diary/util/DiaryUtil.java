@@ -380,6 +380,44 @@ public class DiaryUtil {
         return new Pair(subjectsTitle, resultAverages);
     }
 
+    public static String[][] getArrayToPieChart(User currentUser, List<User> allPupils, int year) {
+        Calendar calendar = Calendar.getInstance();
+        List<Long> allAverages = new ArrayList<>();
+        for (User pupil : allPupils) {
+            double average = 0;
+            int counter = 0;
+            for (Mark mark : pupil.getMarks()) {
+                calendar.setTime(mark.getDate());
+                int y = calendar.get(Calendar.YEAR);
+                if (mark.getValue() != 0 && y == year) {
+                    average += mark.getValue();
+                    counter++;
+                }
+            }
+            allAverages.add(Math.round(average / counter));
+        }
+
+        String[][] averages = new String[10][10];
+        for (int i = 1; i <= 10; i++) {
+            int counter = 0;
+            for (Long mark : allAverages) {
+                if (mark == i) {
+                    counter++;
+                }
+            }
+
+            averages[i - 1][0] = String.valueOf(i);
+            averages[i - 1][1] = String.valueOf(counter);
+        }
+
+        return averages;
+    }
+
+    public static String getJob(User currentUser, int year) {
+        String[] subjects = getTop3SubjectMarks(currentUser, year).first;
+        return null;
+    }
+
     public static void reverseArray(String[][] a, double[][] b) {
         for (int j = 0; j < a.length; j++) {
             for (int i = 0; i < a[j].length; i++) {

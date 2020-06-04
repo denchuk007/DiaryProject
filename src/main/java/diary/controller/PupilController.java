@@ -1,7 +1,9 @@
 package diary.controller;
 
+import diary.model.Classroom;
 import diary.model.Mark;
 import diary.model.User;
+import diary.service.ClassroomService;
 import diary.service.SecurityService;
 import diary.service.SubjectService;
 import diary.service.UserService;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +32,9 @@ public class PupilController {
 
     @Autowired
     private SubjectService subjectService;
+
+    @Autowired
+    private ClassroomService classroomService;
 
     @RequestMapping(value = "/analyze/{year}", method = RequestMethod.GET)
     public String analyze(@PathVariable("year") int year, Model model) {
@@ -58,6 +64,16 @@ public class PupilController {
 
         model.addAttribute("top3SubjectsTitle", DiaryUtil.getTop3SubjectMarks(currentUser, year).first);
         model.addAttribute("top3SubjectsMarks", DiaryUtil.getTop3SubjectMarks(currentUser, year).second);
+
+        List<User> allPupilsFromParallel = new ArrayList<>();
+
+        for (Classroom classroom : classroomService.findAllByDigit(currentUser.getClassroom().getDigit())) {
+            List<User> pupils = userService.findAllByClassroom(classroom);
+
+            allPupilsFromParallel.addAll(pupils);
+        }
+
+        model.addAttribute("arrayToPieChart", DiaryUtil.getArrayToPieChart(currentUser, allPupilsFromParallel, year));
 
         return "analyze";
     }

@@ -10,6 +10,7 @@ public interface ClassroomService {
     void delete(Classroom classroom);
     void delete(Long id);
     List<Classroom> findAll();
+    List<Classroom> findAllByDigit(String digit);
     Classroom findByDigitAndWord(String digit, String word);
     Classroom findById(Long id);
 }
